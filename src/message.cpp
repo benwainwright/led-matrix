@@ -10,6 +10,11 @@ Message::Message(
 {
 }
 
+void Message::setDisplay(MatrixPanel_I2S_DMA *nextDisplay)
+{
+  display = nextDisplay;
+}
+
 void Message::render(const char *theMessage, int8_t x, int8_t y)
 {
 
@@ -33,8 +38,12 @@ void Message::render(const char *theMessage, int8_t x, int8_t y)
   display->print(theMessage);
 }
 
-uint16_t Message::getWidthOffsetForCentre(const char *message)
+int16_t Message::getWidthOffsetForCentre(const char *message)
 {
+  if (display == nullptr)
+  {
+    return 0;
+  }
 
   int16_t x1;
   int16_t y1;
@@ -42,11 +51,15 @@ uint16_t Message::getWidthOffsetForCentre(const char *message)
   uint16_t h;
 
   display->getTextBounds(message, 0, 0, &x1, &y1, &w, &h);
-  return (display->width() - w) / 2;
+  return ((display->width() - w) / 2) - x1;
 }
 
-uint16_t Message::getHeightOffsetForCentre(const char *message)
+int16_t Message::getHeightOffsetForCentre(const char *message)
 {
+  if (display == nullptr)
+  {
+    return 0;
+  }
 
   int16_t x1;
   int16_t y1;
@@ -54,7 +67,7 @@ uint16_t Message::getHeightOffsetForCentre(const char *message)
   uint16_t h;
 
   display->getTextBounds(message, 0, 0, &x1, &y1, &w, &h);
-  return (display->height() - h) / 2;
+  return ((display->height() - h) / 2) - y1;
 }
 
 void Message::write(String message)
@@ -64,6 +77,10 @@ void Message::write(String message)
 
 void Message::write(const char *message)
 {
+  if (display == nullptr)
+  {
+    return;
+  }
 
   display->setTextSize(size);
 

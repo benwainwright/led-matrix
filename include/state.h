@@ -8,6 +8,7 @@ class State
 {
 
 private:
+    PubSubClient *client;
     String mediaTitle;
     String mediaArtist;
     bool mediaPlaying;

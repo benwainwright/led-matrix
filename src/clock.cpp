@@ -10,6 +10,11 @@ Clock::Clock(
 {
 }
 
+void Clock::setDisplay(MatrixPanel_I2S_DMA *display)
+{
+    message.setDisplay(display);
+}
+
 String Clock::withLeadingZeros(int number)
 {
     if (number < 10)
@@ -33,12 +38,7 @@ void Clock::tick()
     String hours = withLeadingZeros(timeinfo.tm_hour);
     String minutes = withLeadingZeros(timeinfo.tm_min);
     String time = hours + ":" + minutes;
-
-    if (time != previousTime)
-    {
-        previousTime = time;
-        message.write(time);
-    }
+    message.write(time);
 }
 
 void Clock::forceRerender()

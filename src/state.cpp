@@ -4,7 +4,8 @@
 #include "constants.h"
 #include "state.h"
 
-State::State(PubSubClient *initClient) : brightnessControl(
+State::State(PubSubClient *initClient) : client(initClient),
+                                         brightnessControl(
                                              NumberMqttEntity(
                                                  initClient,
                                                  "led-matrix-brightness",
@@ -48,12 +49,20 @@ bool State::ensureMutex()
 void State::initialise()
 {
     device.initialise();
+    client->subscribe("homeassistant/media_players/media_player.living_room/artist");
+    client->subscribe("homeassistant/media_players/media_player.living_room/title");
+    client->subscribe("homeassistant/media_players/media_player.living_room/status");
 }
 
 void State::receiveMqttMessage(char *topic, byte *message, unsigned int length)
 {
+    if (!ensureMutex())
+    {
+        return;
+    }
+
     device.receiveMqttMessage(topic, message, length);
-    String snapshot = String((char *)message);
+    String snapshot = String((char *)message, length);
     if (String(topic) == "homeassistant/media_players/media_player.living_room/artist")
     {
         if (xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE)
@@ -72,10 +81,11 @@ void State::receiveMqttMessage(char *topic, byte *message, unsigned int length)
         }
     }
 
-    if (String(topic) == "homeassistant/media_players/media_player.living_room/title")
+    if (String(topic) == "homeassistant/media_players/media_player.living_room/status")
     {
         if (xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE)
         {
+            Serial.println(snapshot);
             mediaPlaying = snapshot == "playing";
             xSemaphoreGive(mutex);
         }
@@ -128,7 +138,7 @@ String State::title()
 
 bool State::playing()
 {
-    String snapshot;
+    bool snapshot;
     if (!ensureMutex())
     {
         return snapshot;

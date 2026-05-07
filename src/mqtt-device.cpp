@@ -15,7 +15,7 @@ MqttDevice::MqttDevice(
     const char *originName,
     const char *swVersion,
     const char *supportUrl,
-    const char *initDiscoveryPrefix) : name(initName), originName(originName), swVersion(swVersion), supportUrl(supportUrl), discoveryPrefix(initDiscoveryPrefix), client(initClient), entities(initEntities), deviceId(initDeviceId)
+    const char *initDiscoveryPrefix) : entities(initEntities), mutex(nullptr), client(initClient), discoveryPrefix(initDiscoveryPrefix), deviceId(initDeviceId), name(initName), originName(originName), swVersion(swVersion), supportUrl(supportUrl)
 {
 }
 

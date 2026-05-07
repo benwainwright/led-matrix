@@ -19,8 +19,8 @@ private:
 
     void render();
     void render(const char *message, int8_t x, int8_t y);
-    uint16_t getWidthOffsetForCentre(const char *message);
-    uint16_t getHeightOffsetForCentre(const char *message);
+    int16_t getWidthOffsetForCentre(const char *message);
+    int16_t getHeightOffsetForCentre(const char *message);
 
 public:
     Message(
@@ -29,6 +29,7 @@ public:
         int8_t xInit,
         int8_t yInit);
 
+    void setDisplay(MatrixPanel_I2S_DMA *nextDisplay);
     void write(const char *message);
     void write(String message);
     void write(std::vector<String> messages);

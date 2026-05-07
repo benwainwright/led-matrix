@@ -4,6 +4,10 @@
 #include "clock.h"
 #include "media-display.h"
 
+#include "andala.h"
+
+#include <Adafruit_GFX.h>
+
 void initDisplay()
 {
     HUB75_I2S_CFG::i2s_pins _pins = {R1_PIN, G1_PIN, B1_PIN, R2_PIN, G2_PIN, B2_PIN, A_PIN, B_PIN, C_PIN, D_PIN, E_PIN, LAT_PIN, OE_PIN, CLK_PIN};
@@ -20,6 +24,9 @@ void initDisplay()
 
     display = std::make_unique<MatrixPanel_I2S_DMA>(mxconfig);
     display->begin();
+    display->setFont(&andala4pt7b);
+
+    theClock.setDisplay(display.get());
 }
 
 void displayLoop(void *parameter)
@@ -36,11 +43,14 @@ void displayLoop(void *parameter)
 
         if (state.page() == String(CLOCK_PAGE))
         {
+            display->setFont(&andala4pt7b);
             theClock.tick();
             media.force();
         }
         else if (state.page() == String(MEDIA_PAGE))
         {
+            display->setFont(nullptr);
+            media.setPlaying(state.playing());
             media.tick(state.artist(), state.title());
             theClock.forceRerender();
         }

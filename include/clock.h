@@ -13,11 +13,11 @@ class Clock
 
 private:
     Message message;
-    String previousTime;
     String withLeadingZeros(int number);
 
 public:
     Clock(MatrixPanel_I2S_DMA *display);
+    void setDisplay(MatrixPanel_I2S_DMA *display);
     void tick();
     void init();
     void forceRerender();

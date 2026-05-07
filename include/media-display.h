@@ -7,11 +7,13 @@
 class MediaDisplay
 {
     Message message;
+    bool playing;
 
 public:
     MediaDisplay(
         MatrixPanel_I2S_DMA *display);
     void tick(String title, String artist);
+    void setPlaying(bool playing);
     void force();
 };
 
