@@ -3,14 +3,9 @@
 #include "constants.h"
 #include "message.h"
 #include "globals.h"
+#include "clock.h"
 
-void initTime()
-{
-    Serial.println();
-    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
-}
-
-String withLeadingZeros(int number)
+String Clock::withLeadingZeros(int number)
 {
     if (number < 10)
     {
@@ -20,7 +15,7 @@ String withLeadingZeros(int number)
     return String(number);
 }
 
-void renderClock()
+void Clock::tick()
 {
     Message message(display.get(), 2, X_CENTRED, Y_CENTRED);
     struct tm timeinfo;
@@ -35,5 +30,14 @@ void renderClock()
     String minutes = withLeadingZeros(timeinfo.tm_min);
     String time = hours + ":" + minutes;
 
-    message.write(time);
+    if (time != previousTime)
+    {
+        previousTime = time;
+        message.write(time);
+    }
+}
+
+void Clock::init()
+{
+    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
 }

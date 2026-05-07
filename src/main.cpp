@@ -11,17 +11,9 @@ PubSubClient client(espClient);
 std::unique_ptr<MatrixPanel_I2S_DMA> display;
 TaskHandle_t finishedDataInitialisationHandle;
 
-ScreenState state = {
-    .time = time(nullptr),
-    .page = CLOCK,
-    .brightness = MqttEntity(
-        &client,
-        "led-matrix-brightness",
-        "LED Matrix Brightness",
-        "homeassistant",
-        nullptr,
-        "100",
-        "number")};
+Clock theClock;
+
+State state = State(&client);
 
 void setup()
 {

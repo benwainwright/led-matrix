@@ -1,6 +1,29 @@
 #include "mqtt-entity.h"
 #include "Arduino.h"
 
+void merge(JsonVariant dst, JsonVariantConst src)
+{
+    if (src.isNull())
+    {
+        return;
+    }
+
+    if (src.is<JsonObjectConst>())
+    {
+        for (JsonPairConst kvp : src.as<JsonObjectConst>())
+        {
+            if (dst[kvp.key()])
+                merge(dst[kvp.key()], kvp.value());
+            else
+                dst[kvp.key()] = kvp.value();
+        }
+    }
+    else
+    {
+        dst.set(src);
+    }
+}
+
 MqttEntity::MqttEntity(
     PubSubClient *initClient,
     const char *initUniqueId,
@@ -8,7 +31,7 @@ MqttEntity::MqttEntity(
     const char *initDiscoveryPrefix,
     const char *initDeviceClass,
     const char *initDefaultState,
-    const char *initType) : client(initClient), uniqueId(initUniqueId), friendlyName(initFriendlyName), discoveryPrefix(initDiscoveryPrefix), deviceClass(initDeviceClass), type(initType), defaultState(initDefaultState), stateValue(initDefaultState == nullptr ? "" : initDefaultState), mutex(nullptr)
+    const char *initType) : client(initClient), uniqueId(initUniqueId), friendlyName(initFriendlyName), discoveryPrefix(initDiscoveryPrefix), deviceClass(initDeviceClass), type(initType), stateValue(initDefaultState == nullptr ? "" : initDefaultState), mutex(nullptr)
 {
     String slash = "/";
     String deviceClassString = deviceClass == nullptr ? "" : deviceClass + slash;
@@ -17,11 +40,35 @@ MqttEntity::MqttEntity(
     commandTopic = discoveryPrefix + slash + uniqueId + slash + type + slash + deviceClassString + "set";
 }
 
+void MqttEntity::addAdditionalConfiguration(JsonDocument config)
+{
+    additionalConfig = config;
+}
+
 bool MqttEntity::compareMessage(byte *message, const char *expected, unsigned int length)
 {
 
     return (length == strlen(expected) &&
             memcmp(message, expected, length) == 0);
+}
+
+JsonDocument MqttEntity::config()
+{
+    String slash = "/";
+
+    String discoveryTopic = discoveryPrefix + slash + type + slash + uniqueId + slash + "config";
+
+    JsonDocument config;
+    config["device_class"] = deviceClass;
+    config["state_topic"] = stateTopic;
+    config["unique_id"] = uniqueId;
+    config["platform"] = type;
+    config["command_topic"] = commandTopic;
+    config["name"] = friendlyName;
+
+    merge(config, additionalConfig);
+
+    return config;
 }
 
 bool MqttEntity::ensureMutex()
@@ -41,39 +88,6 @@ bool MqttEntity::ensureMutex()
     return true;
 }
 
-void MqttEntity::triggerDiscovery()
-{
-
-    String slash = "/";
-
-    String discoveryTopic = discoveryPrefix + slash + type + slash + uniqueId + slash + "config";
-
-    JsonDocument config;
-    config["device_class"] = deviceClass;
-    config["state_topic"] = stateTopic;
-    config["unique_id"] = uniqueId;
-
-    String deviceUnderscore = "device_";
-    config["device"]["identifiers"][0] = deviceUnderscore + uniqueId;
-    config["device"]["name"] = friendlyName;
-    config["command_topic"] = commandTopic;
-    config["friendly_name"] = friendlyName;
-
-    String json;
-
-    serializeJson(config, json);
-
-    Serial.print("Publishing MQTT discovery topic: ");
-    Serial.println(discoveryTopic.c_str());
-
-    Serial.print("Publishing MQTT discovery payload bytes: ");
-    Serial.println(json.length());
-
-    const bool published = client->publish(discoveryTopic.c_str(), json.c_str(), true);
-    Serial.print("MQTT discovery publish ");
-    Serial.println(published ? "succeeded" : "failed");
-}
-
 void MqttEntity::initialise()
 {
     if (!ensureMutex())
@@ -81,21 +95,18 @@ void MqttEntity::initialise()
         return;
     }
 
-    triggerDiscovery();
-    client->subscribe(stateTopic.c_str());
-    client->subscribe(commandTopic.c_str());
-
-    setState(defaultState);
-
-    const bool statusSubscribed = client->subscribe(HOMEASSISTANT_STATUS_TOPIC);
-    Serial.print("MQTT status subscribe ");
-    Serial.print(statusSubscribed ? "succeeded: " : "failed: ");
-    Serial.println(HOMEASSISTANT_STATUS_TOPIC);
-
     const bool subscribed = client->subscribe(stateTopic.c_str());
     Serial.print("MQTT state subscribe ");
     Serial.print(subscribed ? "succeeded: " : "failed: ");
     Serial.println(stateTopic.c_str());
+
+    const bool commandSubscribed = client->subscribe(commandTopic.c_str());
+    Serial.print("MQTT command subscribe ");
+    Serial.print(commandSubscribed ? "succeeded: " : "failed: ");
+    Serial.println(commandTopic.c_str());
+
+    String currentState = state();
+    client->publish(stateTopic.c_str(), currentState.c_str(), currentState.length());
 }
 
 void MqttEntity::setState(String state)
@@ -129,26 +140,16 @@ String MqttEntity::state()
     return snapshot;
 }
 
+String MqttEntity::id()
+{
+    return String(uniqueId);
+}
+
 void MqttEntity::receiveMqttMessage(char *topic, byte *message, unsigned int length)
 {
-    if (String(topic) == HOMEASSISTANT_STATUS_TOPIC && compareMessage(message, "online", length))
+    if (String(topic) == commandTopic)
     {
-        triggerDiscovery();
-    }
-    else if (String(topic) == commandTopic)
-    {
-
         String newState((const char *)message, length);
-
-        if (!ensureMutex())
-        {
-            return;
-        }
-
-        if (xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE)
-        {
-            stateValue = newState;
-            xSemaphoreGive(mutex);
-        }
+        setState(newState);
     }
 }

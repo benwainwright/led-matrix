@@ -17,7 +17,6 @@ void Message::render(const char *message, int8_t x, int8_t y)
   }
 
   display->clearScreen();
-  display->setTextSize(size);
   display->setTextColor(display->color565(255, 255, 255));
   display->setCursor(x, y);
   display->print(message);
@@ -54,6 +53,9 @@ void Message::write(String message)
 
 void Message::write(const char *message)
 {
+
+  display->setTextSize(size);
+
   int8_t trueX = x == X_CENTRED ? getWidthOffsetForCentre(message) : x;
   int8_t trueY = y == Y_CENTRED ? getHeightOffsetForCentre(message) : y;
 

@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "globals.h"
+#include "constants.h"
 #include "clock.h"
 
 void initDisplay()
@@ -13,6 +14,8 @@ void initDisplay()
 
     mxconfig.driver = HUB75_I2S_CFG::FM6126A;
     mxconfig.clkphase = false;
+    mxconfig.min_refresh_rate = 120;
+    mxconfig.i2sspeed = HUB75_I2S_CFG::HZ_16M;
 
     display = std::make_unique<MatrixPanel_I2S_DMA>(mxconfig);
     display->begin();
@@ -25,15 +28,13 @@ void displayLoop(void *parameter)
     initDisplay();
     while (true)
     {
-        String brightnessState = state.brightness.state();
-        uint8_t brightness = brightnessState.length() > 0 ? constrain(brightnessState.toInt(), 0L, 255L) : 100;
-        display->setBrightness8(brightness);
-        switch (state.page)
+        display->setBrightness8(state.brightness());
+
+        if (state.page() == String(CLOCK_PAGE))
         {
-        case CLOCK:
-            renderClock();
-            break;
+            theClock.tick();
         }
+
         vTaskDelay(pdMS_TO_TICKS(100));
     }
 }

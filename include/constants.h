@@ -32,4 +32,7 @@ inline const char *ntpServer = "pool.ntp.org";
 inline constexpr long gmtOffset_sec = 0;
 inline constexpr int daylightOffset_sec = 3600;
 
+#define CLOCK_PAGE "clock"
+#define DASHBOARD_PAGE "dashboard"
+
 #endif

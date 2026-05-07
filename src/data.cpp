@@ -9,7 +9,7 @@ void dataLoop(void *parameter)
 {
     Serial.println("Initialising data loop");
     vTaskDelay(pdMS_TO_TICKS(1000));
-    initTime();
+    theClock.init();
     setupWifi();
     setupMqtt();
     if (finishedDataInitialisationHandle == nullptr)
