@@ -20,12 +20,29 @@ State::State(PubSubClient *initClient) : brightnessControl(
                                                  "Page",
                                                  "homeassistant",
                                                  nullptr,
-                                                 {CLOCK_PAGE, DASHBOARD_PAGE},
+                                                 {CLOCK_PAGE, MEDIA_PAGE},
                                                  CLOCK_PAGE)),
                                          device(MqttDevice(initClient, {&brightnessControl, &pageSelector}, "matrix-led-device", "LED Matrix Display",
                                                            "Ben Wainwright", "0.0.1", "https://github.com/benwainwright/led-matrix",
                                                            "homeassistant"))
 {
+}
+
+bool State::ensureMutex()
+{
+    if (mutex != nullptr)
+    {
+        return true;
+    }
+
+    mutex = xSemaphoreCreateMutex();
+    if (mutex == nullptr)
+    {
+        Serial.println("Failed to create MQTT entity mutex");
+        return false;
+    }
+
+    return true;
 }
 
 void State::initialise()
@@ -36,6 +53,33 @@ void State::initialise()
 void State::receiveMqttMessage(char *topic, byte *message, unsigned int length)
 {
     device.receiveMqttMessage(topic, message, length);
+    String snapshot = String((char *)message);
+    if (String(topic) == "homeassistant/media_players/media_player.living_room/artist")
+    {
+        if (xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE)
+        {
+            mediaArtist = snapshot;
+            xSemaphoreGive(mutex);
+        }
+    }
+
+    if (String(topic) == "homeassistant/media_players/media_player.living_room/title")
+    {
+        if (xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE)
+        {
+            mediaTitle = snapshot;
+            xSemaphoreGive(mutex);
+        }
+    }
+
+    if (String(topic) == "homeassistant/media_players/media_player.living_room/title")
+    {
+        if (xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE)
+        {
+            mediaPlaying = snapshot == "playing";
+            xSemaphoreGive(mutex);
+        }
+    }
 }
 
 u_int8_t State::brightness()
@@ -48,4 +92,52 @@ u_int8_t State::brightness()
 String State::page()
 {
     return pageSelector.state();
+}
+
+String State::artist()
+{
+    String snapshot;
+    if (!ensureMutex())
+    {
+        return snapshot;
+    }
+
+    if (xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE)
+    {
+        snapshot = mediaArtist;
+        xSemaphoreGive(mutex);
+    }
+    return snapshot;
+}
+
+String State::title()
+{
+    String snapshot;
+    if (!ensureMutex())
+    {
+        return snapshot;
+    }
+
+    if (xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE)
+    {
+        snapshot = mediaTitle;
+        xSemaphoreGive(mutex);
+    }
+    return snapshot;
+}
+
+bool State::playing()
+{
+    String snapshot;
+    if (!ensureMutex())
+    {
+        return snapshot;
+    }
+
+    if (xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE)
+    {
+        snapshot = mediaPlaying;
+        xSemaphoreGive(mutex);
+    }
+    return snapshot;
 }

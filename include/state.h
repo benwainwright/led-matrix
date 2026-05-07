@@ -8,9 +8,14 @@ class State
 {
 
 private:
+    String mediaTitle;
+    String mediaArtist;
+    bool mediaPlaying;
+    SemaphoreHandle_t mutex;
     MqttDevice device;
     NumberMqttEntity brightnessControl;
     SelectMqttEntity pageSelector;
+    bool ensureMutex();
 
 public:
     State(PubSubClient *initClient);
@@ -18,4 +23,7 @@ public:
     void receiveMqttMessage(char *topic, byte *message, unsigned int length);
     u_int8_t brightness();
     String page();
+    String title();
+    String artist();
+    bool playing();
 };

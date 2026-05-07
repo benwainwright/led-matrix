@@ -5,6 +5,11 @@
 #include "globals.h"
 #include "clock.h"
 
+Clock::Clock(
+    MatrixPanel_I2S_DMA *display) : message(display, 2, X_CENTRED, Y_CENTRED)
+{
+}
+
 String Clock::withLeadingZeros(int number)
 {
     if (number < 10)
@@ -17,7 +22,6 @@ String Clock::withLeadingZeros(int number)
 
 void Clock::tick()
 {
-    Message message(display.get(), 2, X_CENTRED, Y_CENTRED);
     struct tm timeinfo;
 
     if (!getLocalTime(&timeinfo))
@@ -35,6 +39,11 @@ void Clock::tick()
         previousTime = time;
         message.write(time);
     }
+}
+
+void Clock::forceRerender()
+{
+    message.force();
 }
 
 void Clock::init()

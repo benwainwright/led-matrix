@@ -11,7 +11,7 @@ PubSubClient client(espClient);
 std::unique_ptr<MatrixPanel_I2S_DMA> display;
 TaskHandle_t finishedDataInitialisationHandle;
 
-Clock theClock;
+Clock theClock = Clock(display.get());
 
 State state = State(&client);
 

@@ -2,6 +2,7 @@
 #include "globals.h"
 #include "constants.h"
 #include "clock.h"
+#include "media-display.h"
 
 void initDisplay()
 {
@@ -26,6 +27,9 @@ void displayLoop(void *parameter)
 
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
     initDisplay();
+
+    MediaDisplay media = MediaDisplay(display.get());
+
     while (true)
     {
         display->setBrightness8(state.brightness());
@@ -33,6 +37,12 @@ void displayLoop(void *parameter)
         if (state.page() == String(CLOCK_PAGE))
         {
             theClock.tick();
+            media.force();
+        }
+        else if (state.page() == String(MEDIA_PAGE))
+        {
+            media.tick(state.artist(), state.title());
+            theClock.forceRerender();
         }
 
         vTaskDelay(pdMS_TO_TICKS(100));

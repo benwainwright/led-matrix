@@ -9,12 +9,15 @@ class Message
 {
 
 private:
+    bool forceRerender;
+    String message;
     uint8_t size;
     int8_t x;
     int8_t y;
 
     MatrixPanel_I2S_DMA *display;
 
+    void render();
     void render(const char *message, int8_t x, int8_t y);
     uint16_t getWidthOffsetForCentre(const char *message);
     uint16_t getHeightOffsetForCentre(const char *message);
@@ -28,6 +31,8 @@ public:
 
     void write(const char *message);
     void write(String message);
+    void write(std::vector<String> messages);
+    void force();
 };
 
 #endif
