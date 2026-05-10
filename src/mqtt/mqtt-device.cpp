@@ -23,12 +23,16 @@ void MqttDevice::triggerDiscovery()
 {
     String slash = "/";
 
-    String discoveryTopic = discoveryPrefix + slash + "device" + slash + deviceId + slash + "config";
+    String topicPrefix = discoveryPrefix + slash + "device" + slash + deviceId + slash;
+
+    String discoveryTopic = topicPrefix + "config";
+    String availabilityTopic = topicPrefix + "availability";
 
     JsonDocument config;
 
     config["dev"]["name"] = name;
     config["dev"]["ids"] = deviceId;
+    config["dev"]["availability_topic"] = availabilityTopic;
     config["origin"]["name"] = originName;
     config["origin"]["sw_version"] = swVersion;
     config["origin"]["support_url"] = supportUrl;
@@ -48,6 +52,7 @@ void MqttDevice::triggerDiscovery()
     Serial.println(json.length());
 
     const bool published = client->publish(discoveryTopic.c_str(), json.c_str(), true);
+    client->publish(availabilityTopic.c_str(), "online", true);
     Serial.print("MQTT discovery publish ");
     Serial.println(published ? "succeeded" : "failed");
 }
