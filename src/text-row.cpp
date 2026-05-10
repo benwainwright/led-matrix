@@ -1,6 +1,7 @@
 #include "text-row.h"
 
-TextRow::TextRow(std::vector<Text> row) : row(row) {}
+TextRow::TextRow(std::vector<Text> row) : TextRow(row, 1) {}
+TextRow::TextRow(std::vector<Text> row, size_t fontSize) : row(row), fontSizeValue(fontSize) {}
 
 size_t TextRow::size()
 {
@@ -34,4 +35,9 @@ String TextRow::rowString() const
     }
 
     return buffer;
+}
+
+size_t TextRow::fontSize()
+{
+    return fontSizeValue;
 }

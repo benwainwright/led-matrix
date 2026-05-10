@@ -7,11 +7,13 @@ class TextRow
 {
 private:
     std::vector<Text> row;
-    size_t fontSize;
+    size_t fontSizeValue;
 
 public:
     TextRow(std::vector<Text> row);
+    TextRow(std::vector<Text> row, size_t fontSize);
     size_t size();
+    size_t fontSize();
     bool isDirty() const;
     String rowString() const;
     Text &operator[](size_t index);

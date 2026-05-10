@@ -3,11 +3,12 @@
 
 #define LED_BUILTIN 2
 
-#define R1_PIN 27
 #define G1_PIN 14
-#define B1_PIN 26
-#define R2_PIN 25
 #define G2_PIN 13
+#define B1_PIN 26
+
+#define R1_PIN 27
+#define R2_PIN 25
 #define B2_PIN 33
 #define A_PIN 23
 #define B_PIN 16

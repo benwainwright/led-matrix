@@ -2,7 +2,7 @@
 
 Page::Page(
     MatrixPanel_I2S_DMA *display,
-    std::vector<TextRow> rows)
+    std::shared_ptr<std::vector<TextRow>> rows)
     : pageDirty(true), rows(rows), display(display)
 {
 }
@@ -19,9 +19,9 @@ bool Page::isDirty()
         return true;
     }
 
-    for (size_t i = 0; i < rows.size(); i++)
+    for (size_t i = 0; i < rows->size(); i++)
     {
-        if (rows[i].isDirty())
+        if ((*rows)[i].isDirty())
         {
             return true;
         }
@@ -35,10 +35,10 @@ void Page::render()
     if (isDirty())
     {
         display->clearScreen();
-        Serial.println(rows.size());
-        for (size_t i = 0; i < rows.size(); i++)
+        Serial.println(rows->size());
+        for (size_t i = 0; i < rows->size(); i++)
         {
-            renderRow(rows[i], i);
+            renderRow((*rows)[i], i);
         }
     }
     pageDirty = false;
@@ -100,10 +100,10 @@ int16_t Page::getWidthOfTextItem(const Text &text, int16_t x, int16_t y)
 void Page::renderRow(TextRow &row, uint8_t index)
 {
     auto raw = row.rowString();
-    display->setTextSize(1);
+    display->setTextSize(row.fontSize());
     display->setTextWrap(false);
     auto widthOffset = getWidthOffsetForCentre(raw.c_str());
-    auto heightOffset = getHeightOffsetForCentre(raw.c_str(), index, rows.size());
+    auto heightOffset = getHeightOffsetForCentre(raw.c_str(), index, rows->size());
 
     display->setCursor(widthOffset, heightOffset);
 

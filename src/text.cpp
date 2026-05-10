@@ -6,14 +6,20 @@ Text::Text(String content, Color color) : contentValue(content), colorValue(colo
 
 void Text::setColor(Color color)
 {
+    if (color.red != colorValue.red || color.green != colorValue.green || color.blue != colorValue.blue)
+    {
+        dirty = true;
+    }
     colorValue = color;
-    dirty = true;
 }
 
 void Text::setContent(String content)
 {
+    if (contentValue != content)
+    {
+        dirty = true;
+    }
     contentValue = content;
-    dirty = true;
 }
 
 Color Text::color() const

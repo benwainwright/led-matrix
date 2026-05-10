@@ -12,6 +12,7 @@ private:
     bool dirty;
 
 public:
+    Text(String content, Color color, size_t fontSize);
     Text(String content, Color color);
     void setContent(String content);
     String content() const;

@@ -10,7 +10,7 @@ class Page
 {
 private:
     bool pageDirty;
-    std::vector<TextRow> rows;
+    std::shared_ptr<std::vector<TextRow>> rows;
     MatrixPanel_I2S_DMA *display;
     void renderRow(TextRow &row, uint8_t index);
     int16_t getHeightOffsetForCentre(const char *message, uint8_t index, uint8_t count);
@@ -21,7 +21,7 @@ private:
 public:
     Page(
         MatrixPanel_I2S_DMA *display,
-        std::vector<TextRow> rows);
+        std::shared_ptr<std::vector<TextRow>> rows);
     void setRow(uint8_t rowNumber, std::vector<Text> row);
     void render();
     void setDirty();

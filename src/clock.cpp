@@ -1,18 +1,18 @@
 #include <Arduino.h>
 #include <time.h>
 #include "constants.h"
-#include "message.h"
 #include "globals.h"
 #include "clock.h"
 
-Clock::Clock(
-    MatrixPanel_I2S_DMA *display) : message(display, 2, X_CENTRED, Y_CENTRED)
+Clock::Clock(MatrixPanel_I2S_DMA *display)
+    : row(std::make_shared<std::vector<TextRow>>(
+          std::initializer_list<TextRow>{
+              TextRow(
+                  {Text("00", Color{255, 0, 0}),
+                   Text(":", Color{0, 255, 0}),
+                   Text("00", Color{0, 0, 255})},
+                  2)}))
 {
-}
-
-void Clock::setDisplay(MatrixPanel_I2S_DMA *display)
-{
-    message.setDisplay(display);
 }
 
 String Clock::withLeadingZeros(int number)
@@ -37,12 +37,18 @@ void Clock::tick()
 
     String hours = withLeadingZeros(timeinfo.tm_hour);
     String minutes = withLeadingZeros(timeinfo.tm_min);
-    String time = hours + ":" + minutes;
+
+    (*row)[0][0].setContent(hours);
+    (*row)[0][2].setContent(minutes);
+}
+
+std::shared_ptr<std::vector<TextRow>> Clock::getText()
+{
+    return row;
 }
 
 void Clock::forceRerender()
 {
-    message.force();
 }
 
 void Clock::init()

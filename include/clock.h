@@ -5,6 +5,8 @@
 
 #include <Arduino.h>
 #include "message.h"
+#include "text.h"
+#include "text-row.h"
 
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 
@@ -12,15 +14,18 @@ class Clock
 {
 
 private:
-    Message message;
     String withLeadingZeros(int number);
+    std::shared_ptr<std::vector<TextRow>> row;
 
 public:
     Clock(MatrixPanel_I2S_DMA *display);
+
     void setDisplay(MatrixPanel_I2S_DMA *display);
     void tick();
     void init();
     void forceRerender();
+    Text &operator[](size_t index);
+    std::shared_ptr<std::vector<TextRow>> getText();
 };
 
 #endif

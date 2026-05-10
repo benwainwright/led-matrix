@@ -7,12 +7,43 @@
 #include "page.h"
 #include "renderer.h"
 #include "andala.h"
+#include "clock.h"
 
 #include <Adafruit_GFX.h>
 
 void initDisplay()
 {
-    HUB75_I2S_CFG::i2s_pins _pins = {R1_PIN, G1_PIN, B1_PIN, R2_PIN, G2_PIN, B2_PIN, A_PIN, B_PIN, C_PIN, D_PIN, E_PIN, LAT_PIN, OE_PIN, CLK_PIN};
+    HUB75_I2S_CFG::i2s_pins _pins = {
+        R1_PIN,
+
+        /**
+         * I've swapped the blue and green pins round, because
+         * even though I've wired everything up correctly, blue pixels
+         * are appearing green and vice versa
+         */
+        B1_PIN,
+        G1_PIN,
+        /**
+         * End swap
+         */
+
+        R2_PIN,
+
+        /**
+         * See above
+         */
+        B2_PIN,
+        G2_PIN,
+        /** End swap */
+
+        A_PIN,
+        B_PIN,
+        C_PIN,
+        D_PIN,
+        E_PIN,
+        LAT_PIN,
+        OE_PIN,
+        CLK_PIN};
     HUB75_I2S_CFG mxconfig(
         DISPLAY_WIDTH,
         DISPLAY_HEIGHT,
@@ -27,8 +58,6 @@ void initDisplay()
     display = std::make_unique<MatrixPanel_I2S_DMA>(mxconfig);
     display->begin();
     display->setFont(&andala4pt7b);
-
-    theClock.setDisplay(display.get());
 }
 
 void displayLoop(void *parameter)
@@ -37,24 +66,15 @@ void displayLoop(void *parameter)
 
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-    auto hour = Text("00", Color{255, 255, 255});
-    auto divider = Text(":", Color{0, 255, 0});
-    auto minutes = Text("00", Color{255, 255, 255});
-
-    auto clockPage = Page(display.get(), {TextRow({hour, divider, minutes})});
-
-    auto artist = Text("David Bowie", Color{93, 93, 93});
-    auto title = Text("Space Oddity", Color{255, 255, 255});
-    auto mediaPage = Page(display.get(), {
-                                             TextRow({artist}),
-                                             TextRow({title}),
-                                         });
+    Clock clock = Clock(display.get());
+    auto clockPage = Page(display.get(), clock.getText());
+    auto mediaPage = Page(display.get(), {});
 
     auto renderer = Renderer({clockPage, mediaPage});
-    String activePage;
 
     while (true)
     {
+        clock.tick();
         display->setBrightness8(state.brightness());
 
         const String requestedPage = state.page();
