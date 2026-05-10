@@ -66,12 +66,10 @@ void displayLoop(void *parameter)
 
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-    Clock clock = Clock(display.get());
-    MediaDisplay media = MediaDisplay(display.get());
-
+    auto clock = Clock(display.get());
+    auto media = MediaDisplay(display.get());
     auto clockPage = Page(display.get(), clock.getText());
     auto mediaPage = Page(display.get(), media.getText());
-
     auto renderer = Renderer({clockPage, mediaPage});
 
     while (true)
