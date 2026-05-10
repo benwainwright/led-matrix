@@ -38,7 +38,6 @@ void Clock::tick()
     String hours = withLeadingZeros(timeinfo.tm_hour);
     String minutes = withLeadingZeros(timeinfo.tm_min);
     String time = hours + ":" + minutes;
-    message.write(time);
 }
 
 void Clock::forceRerender()

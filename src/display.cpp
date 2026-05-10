@@ -4,6 +4,8 @@
 #include "clock.h"
 #include "media-display.h"
 
+#include "page.h"
+#include "renderer.h"
 #include "andala.h"
 
 #include <Adafruit_GFX.h>
@@ -31,30 +33,42 @@ void initDisplay()
 
 void displayLoop(void *parameter)
 {
-
-    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
     initDisplay();
 
-    MediaDisplay media = MediaDisplay(display.get());
+    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+    auto hour = Text("00", Color{255, 255, 255});
+    auto divider = Text(":", Color{0, 255, 0});
+    auto minutes = Text("00", Color{255, 255, 255});
+
+    auto clockPage = Page(display.get(), {TextRow({hour, divider, minutes})});
+
+    auto artist = Text("David Bowie", Color{93, 93, 93});
+    auto title = Text("Space Oddity", Color{255, 255, 255});
+    auto mediaPage = Page(display.get(), {
+                                             TextRow({artist}),
+                                             TextRow({title}),
+                                         });
+
+    auto renderer = Renderer({clockPage, mediaPage});
+    String activePage;
 
     while (true)
     {
         display->setBrightness8(state.brightness());
 
-        if (state.page() == String(CLOCK_PAGE))
+        const String requestedPage = state.page();
+
+        if (requestedPage == String(CLOCK_PAGE))
         {
-            display->setFont(&andala4pt7b);
-            theClock.tick();
-            media.force();
+            renderer.showPage(0);
         }
-        else if (state.page() == String(MEDIA_PAGE))
+        else if (requestedPage == String(MEDIA_PAGE))
         {
-            display->setFont(nullptr);
-            media.setPlaying(state.playing());
-            media.tick(state.artist(), state.title());
-            theClock.forceRerender();
+            renderer.showPage(1);
         }
 
-        vTaskDelay(pdMS_TO_TICKS(100));
+        renderer.render();
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
