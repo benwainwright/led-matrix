@@ -1,5 +1,9 @@
 #ifndef RENDERER_H
 #define RENDERER_H
+
+#include <Arduino.h>
+#include "rendering/page.h"
+
 class Renderer
 {
     std::vector<Page> pages;

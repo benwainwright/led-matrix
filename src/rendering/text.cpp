@@ -1,6 +1,6 @@
 #include <Arduino.h>>
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
-#include "text.h"
+#include "rendering/text.h"
 
 Text::Text(String content, Color color) : contentValue(content), colorValue(color), dirty(true) {}
 

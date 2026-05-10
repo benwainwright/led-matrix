@@ -4,9 +4,8 @@
 #define NOT_SET -1
 
 #include <Arduino.h>
-#include "message.h"
-#include "text.h"
-#include "text-row.h"
+#include "rendering/text.h"
+#include "rendering/text-row.h"
 
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 

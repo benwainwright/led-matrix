@@ -1,8 +1,8 @@
 #include "Arduino.h"
-#include "number-mqtt-entity.h"
-#include "select-mqtt-entity.h"
+#include "mqtt/number-mqtt-entity.h"
+#include "mqtt/select-mqtt-entity.h"
+#include "mqtt/mqtt-device.h"
 #include "constants.h"
-#include "mqtt-device.h"
 
 class State
 {

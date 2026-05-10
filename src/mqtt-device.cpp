@@ -1,7 +1,7 @@
-#include "base-mqtt-entity.h"
+#include "mqtt/base-mqtt-entity.h"
 #include <ArduinoJson.h>
 
-#include "mqtt-device.h"
+#include "mqtt/mqtt-device.h"
 #include "Arduino.h"
 #include <PubSubClient.h>
 

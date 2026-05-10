@@ -1,6 +1,6 @@
 #include <Arduino.h>
-#include "number-mqtt-entity.h"
-#include "select-mqtt-entity.h"
+#include "mqtt/number-mqtt-entity.h"
+#include "mqtt/select-mqtt-entity.h"
 #include "constants.h"
 #include "state.h"
 

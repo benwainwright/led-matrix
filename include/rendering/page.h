@@ -10,6 +10,7 @@ class Page
 {
 private:
     bool pageDirty;
+    size_t gap;
     std::shared_ptr<std::vector<TextRow>> rows;
     MatrixPanel_I2S_DMA *display;
     void renderRow(TextRow &row, uint8_t index);
@@ -22,6 +23,9 @@ public:
     Page(
         MatrixPanel_I2S_DMA *display,
         std::shared_ptr<std::vector<TextRow>> rows);
+    Page(
+        MatrixPanel_I2S_DMA *display,
+        std::shared_ptr<std::vector<TextRow>> rows, size_t gap);
     void setRow(uint8_t rowNumber, std::vector<Text> row);
     void render();
     void setDirty();

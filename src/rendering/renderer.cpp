@@ -1,6 +1,6 @@
 #include <Arduino.h>
-#include "page.h"
-#include "renderer.h"
+#include "rendering/page.h"
+#include "rendering/renderer.h"
 
 Renderer::Renderer(std::vector<Page> pages) : pages(pages), page(0) {}
 

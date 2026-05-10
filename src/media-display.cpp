@@ -1,6 +1,4 @@
-#include "media-display.h"
-
-#include "message.h"
+#include "components/media-display.h"
 
 MediaDisplay::MediaDisplay(
     MatrixPanel_I2S_DMA *display) : rows(std::make_shared<std::vector<TextRow>>(std::initializer_list<TextRow>{

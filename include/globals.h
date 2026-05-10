@@ -5,7 +5,7 @@
 #include <PubSubClient.h>
 #include "constants.h"
 #include "state.h"
-#include "clock.h"
+#include "components/clock.h"
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 
 extern WiFiClient espClient;

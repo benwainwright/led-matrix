@@ -1,8 +1,7 @@
 #include "data.h"
 #include <Arduino.h>
-#include "mqtt.h"
-#include "clock.h"
-#include "mqtt.h"
+#include "components/clock.h"
+#include "mqtt/mqtt.h"
 #include "wifi_setup.h"
 
 void dataLoop(void *parameter)

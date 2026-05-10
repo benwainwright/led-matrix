@@ -1,5 +1,4 @@
 #include "globals.h"
-#include "message.h"
 
 void messageReceivedCallback(char *topic, byte *message, unsigned int length)
 {

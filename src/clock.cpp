@@ -2,12 +2,12 @@
 #include <time.h>
 #include "constants.h"
 #include "globals.h"
-#include "clock.h"
+#include "components/clock.h"
 
 Clock::Clock(MatrixPanel_I2S_DMA *display)
-    : 
-    
-    row(std::make_shared<std::vector<TextRow>>(
+    :
+
+      row(std::make_shared<std::vector<TextRow>>(
           std::initializer_list<TextRow>{
               TextRow(
                   {Text("00", Color{255, 255, 255}),
