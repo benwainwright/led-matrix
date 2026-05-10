@@ -26,7 +26,14 @@ State::State(PubSubClient *initClient) : client(initClient),
                                                  {CLOCK_PAGE, MEDIA_PAGE},
                                                  CLOCK_PAGE)),
 
-                                         device(MqttDevice(initClient, {&brightnessControl, &pageSelector}, "matrix-led-device", "LED Matrix Display",
+                                         notifyEntity({NotifyMqttEntity(
+                                             initClient,
+                                             "led-matrix-page",
+                                             "Page",
+                                             "homeassistant")
+
+                                         }),
+                                         device(MqttDevice(initClient, {&brightnessControl, &pageSelector, &notifyEntity}, "matrix-led-device", "LED Matrix Display",
                                                            "Ben Wainwright", "0.0.1", "https://github.com/benwainwright/led-matrix",
                                                            "homeassistant"))
 {
@@ -137,6 +144,11 @@ String State::title()
         xSemaphoreGive(mutex);
     }
     return snapshot;
+}
+
+String State::notify()
+{
+    return notifyEntity.state();
 }
 
 bool State::playing()

@@ -6,7 +6,6 @@
 class BaseMqttEntity
 {
 public:
-    virtual void setState(String state) = 0;
     virtual String state() = 0;
     virtual JsonDocument config() = 0;
     virtual void initialise() = 0;

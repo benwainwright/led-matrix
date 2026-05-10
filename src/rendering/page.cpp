@@ -81,8 +81,8 @@ int16_t Page::getHeightOffsetForCentre(const char *message, uint8_t index, uint8
     uint16_t h;
 
     display->getTextBounds(message, 0, 0, &x1, &y1, &w, &h);
-    float centreY = (display->height() - (h + 1)) / 2.0f - y1;
-    float rowOffset = (index - ((count - 1) / 2.0f)) * (h + 1);
+    float centreY = (display->height() - (h + gap)) / 2.0f - y1;
+    float rowOffset = (index - ((count - 1) / 2.0f)) * (h + gap);
 
     return centreY + rowOffset;
 }
