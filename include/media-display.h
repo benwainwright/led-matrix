@@ -2,12 +2,14 @@
 #define MEDIA_DISPLAY_H
 
 #include "message.h"
+#include "text-row.h"
+
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 
 class MediaDisplay
 {
-    Message message;
     bool playing;
+    std::shared_ptr<std::vector<TextRow>> rows;
 
 public:
     MediaDisplay(
@@ -15,6 +17,7 @@ public:
     void tick(String title, String artist);
     void setPlaying(bool playing);
     void force();
+    std::shared_ptr<std::vector<TextRow>> getText();
 };
 
 #endif

@@ -67,14 +67,19 @@ void displayLoop(void *parameter)
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
     Clock clock = Clock(display.get());
+    MediaDisplay media = MediaDisplay(display.get());
+
     auto clockPage = Page(display.get(), clock.getText());
-    auto mediaPage = Page(display.get(), {});
+    auto mediaPage = Page(display.get(), media.getText());
 
     auto renderer = Renderer({clockPage, mediaPage});
 
     while (true)
     {
         clock.tick();
+
+        media.tick(state.title(), state.artist());
+
         display->setBrightness8(state.brightness());
 
         const String requestedPage = state.page();

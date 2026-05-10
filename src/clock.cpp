@@ -5,12 +5,14 @@
 #include "clock.h"
 
 Clock::Clock(MatrixPanel_I2S_DMA *display)
-    : row(std::make_shared<std::vector<TextRow>>(
+    : 
+    
+    row(std::make_shared<std::vector<TextRow>>(
           std::initializer_list<TextRow>{
               TextRow(
-                  {Text("00", Color{255, 0, 0}),
-                   Text(":", Color{0, 255, 0}),
-                   Text("00", Color{0, 0, 255})},
+                  {Text("00", Color{255, 255, 255}),
+                   Text(":", Color{0, 100, 100}),
+                   Text("00", Color{255, 255, 255})},
                   2)}))
 {
 }
