@@ -1,7 +1,7 @@
 #ifndef MQTT_ENTITY_H
 #define MQTT_ENTITY_H
 
-#include "mqtt/base-mqtt-entity.h"
+#include "base-mqtt-entity.h"
 #include <ArduinoJson.h>
 #include <PubSubClient.h>
 

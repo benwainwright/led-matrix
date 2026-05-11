@@ -1,4 +1,4 @@
-#include "rendering/text-row.h"
+#include "text-row.h"
 
 TextRow::TextRow(std::vector<Text> row) : TextRow(row, 1) {}
 TextRow::TextRow(std::vector<Text> row, size_t fontSize) : row(row), fontSizeValue(fontSize) {}

@@ -1,7 +1,7 @@
 #include <PubSubClient.h>
 
-#include "mqtt/mqtt-entity.h"
-#include "mqtt/mqtt-notify.h"
+#include "mqtt-entity.h"
+#include "mqtt-notify.h"
 
 NotifyMqttEntity::NotifyMqttEntity(
     PubSubClient *client,

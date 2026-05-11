@@ -1,7 +1,7 @@
 #include <PubSubClient.h>
 
-#include "mqtt/mqtt-entity.h"
-#include "mqtt/select-mqtt-entity.h"
+#include "mqtt-entity.h"
+#include "select-mqtt-entity.h"
 
 SelectMqttEntity::SelectMqttEntity(
     PubSubClient *client,

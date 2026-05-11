@@ -1,10 +1,8 @@
 #include <Arduino.h>
 #include "globals.h"
 #include "constants.h"
-#include "components/clock.h"
-#include "components/media-display.h"
-#include "rendering/page.h"
-#include "rendering/renderer.h"
+#include <Components.h>
+#include <Rendering.h>
 #include "andala.h"
 
 #include <Adafruit_GFX.h>
@@ -69,12 +67,12 @@ void displayLoop(void *parameter)
     auto media = MediaDisplay(display.get());
     auto clockPage = Page(display.get(), clock.getText());
     auto mediaPage = Page(display.get(), media.getText(), 2);
+
     auto renderer = Renderer({clockPage, mediaPage});
 
     while (true)
     {
         clock.tick();
-
         media.tick(state.title(), state.artist());
 
         display->setBrightness8(state.brightness());

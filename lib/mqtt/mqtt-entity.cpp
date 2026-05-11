@@ -1,4 +1,4 @@
-#include "mqtt/mqtt-entity.h"
+#include "mqtt-entity.h"
 #include "Arduino.h"
 
 void merge(JsonVariant dst, JsonVariantConst src)

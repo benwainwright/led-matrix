@@ -29,9 +29,6 @@ inline const char *mqttUser = "screen";
 inline const char *mqttPass = "5nW~Um_iqm56";
 inline const char *mqttServer = "192.168.1.143";
 
-inline const char *ntpServer = "pool.ntp.org";
-inline constexpr long gmtOffset_sec = 0;
-inline constexpr int daylightOffset_sec = 3600;
 
 #define CLOCK_PAGE "clock"
 #define MEDIA_PAGE "media"

@@ -1,7 +1,7 @@
 #include <PubSubClient.h>
 
-#include "mqtt/mqtt-entity.h"
-#include "mqtt/number-mqtt-entity.h"
+#include "mqtt-entity.h"
+#include "number-mqtt-entity.h"
 
 NumberMqttEntity::NumberMqttEntity(
     PubSubClient *client,

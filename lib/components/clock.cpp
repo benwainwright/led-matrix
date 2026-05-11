@@ -1,8 +1,6 @@
 #include <Arduino.h>
 #include <time.h>
-#include "constants.h"
-#include "globals.h"
-#include "components/clock.h"
+#include "clock.h"
 
 Clock::Clock(MatrixPanel_I2S_DMA *display)
     :

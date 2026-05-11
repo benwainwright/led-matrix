@@ -1,4 +1,4 @@
-#include "rendering/page.h"
+#include "page.h"
 
 Page::Page(
     MatrixPanel_I2S_DMA *display,

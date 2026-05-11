@@ -1,8 +1,7 @@
 #include "globals.h"
 #include "wifi_setup.h"
 #include "display.h"
-#include "mqtt/mqtt.h"
-#include "mqtt/mqtt-entity.h"
+#include <Mqtt.h>
 #include "data.h"
 
 WiFiClient espClient;

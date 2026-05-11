@@ -2,7 +2,7 @@
 #define RENDERER_H
 
 #include <Arduino.h>
-#include "rendering/page.h"
+#include "page.h"
 
 class Renderer
 {

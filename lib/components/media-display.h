@@ -1,8 +1,7 @@
 #ifndef MEDIA_DISPLAY_H
 #define MEDIA_DISPLAY_H
 
-#include "rendering/text-row.h"
-
+#include <Rendering.h>
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 
 class MediaDisplay

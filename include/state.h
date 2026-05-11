@@ -1,11 +1,9 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include "Arduino.h"
-#include "mqtt/number-mqtt-entity.h"
-#include "mqtt/select-mqtt-entity.h"
-#include "mqtt/mqtt-device.h"
-#include "mqtt/mqtt-notify.h"
+#include <Arduino.h>
+#include <Mqtt.h>
+
 #include "constants.h"
 
 class State

@@ -1,0 +1,6 @@
+#include "mqtt-entity.h"
+#include "mqtt-device.h"
+#include "mqtt-notify.h"
+#include "mqtt-entity.h"
+#include "select-mqtt-entity.h"
+#include "number-mqtt-entity.h"
