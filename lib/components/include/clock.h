@@ -29,5 +29,4 @@ public:
     std::shared_ptr<std::vector<TextRow>> getText();
 };
 
-
 #endif

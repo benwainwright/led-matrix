@@ -1,0 +1,12 @@
+{
+  "$schema": "https://raw.githubusercontent.com/platformio/platformio-core/develop/platformio/assets/schema/library.json",
+  "name": "rendering",
+  "version": "1.0.0",
+  "description": "Rendering utilities for an MQTT display screen",
+  "keywords": [],
+  "headers": ["Rendering.h"],
+  "build": {
+    "srcDir": "src",
+    "includeDir": "include"
+  }
+}

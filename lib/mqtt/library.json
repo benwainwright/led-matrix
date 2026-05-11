@@ -1,0 +1,12 @@
+{
+  "$schema": "https://raw.githubusercontent.com/platformio/platformio-core/develop/platformio/assets/schema/library.json",
+  "name": "mqtt-hass",
+  "version": "1.0.0",
+  "description": "Utilities for creating home assistant MQTT entities",
+  "keywords": ["homeassistant", "mqtt"],
+  "headers": ["Mqtt.h"],
+  "build": {
+    "srcDir": "src",
+    "includeDir": "include"
+  }
+}
