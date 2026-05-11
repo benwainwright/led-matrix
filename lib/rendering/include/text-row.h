@@ -2,16 +2,26 @@
 #define TEXT_ROW_H
 #include <Arduino.h>
 #include "text.h"
+#include "renderable-text.h"
+#include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 
-class TextRow
+class TextRow : public RenderableText
 {
 private:
     std::vector<Text> row;
     size_t fontSizeValue;
+    int16_t xValue;
+    int16_t yValue;
+    MatrixPanel_I2S_DMA *display;
+    int16_t getRenderedWidth();
 
 public:
-    TextRow(std::vector<Text> row);
-    TextRow(std::vector<Text> row, size_t fontSize);
+    TextRow(MatrixPanel_I2S_DMA *display, std::vector<Text> row);
+    TextRow(MatrixPanel_I2S_DMA *display, std::vector<Text> row, size_t fontSize);
+    int16_t x();
+    int16_t y();
+    void setX(int16_t x);
+    void setY(int16_t y);
     size_t size();
     size_t fontSize();
     bool isDirty() const;

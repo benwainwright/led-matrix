@@ -16,7 +16,7 @@ class Clock
 
 private:
     String withLeadingZeros(int number);
-    std::shared_ptr<std::vector<TextRow>> row;
+    std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> row;
 
 public:
     Clock(MatrixPanel_I2S_DMA *display);
@@ -26,7 +26,7 @@ public:
     void init();
     void forceRerender();
     Text &operator[](size_t index);
-    std::shared_ptr<std::vector<TextRow>> getText();
+    std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> getText();
 };
 
 #endif

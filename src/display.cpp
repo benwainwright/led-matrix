@@ -64,7 +64,8 @@ void displayLoop(void *parameter)
 
     auto clock = Clock(display.get());
     clock.init();
-    auto media = MediaDisplay(display.get());
+    auto media = MediaDisplay(display.get(), DISPLAY_WIDTH);
+
     auto clockPage = Page(display.get(), clock.getText());
     auto mediaPage = Page(display.get(), media.getText(), 2);
 

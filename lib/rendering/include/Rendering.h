@@ -1,5 +1,5 @@
 #include "page.h"
-#include "renderable.h"
+#include "renderable-text.h"
 #include "renderer.h"
 #include "text-row.h"
 #include "text.h"

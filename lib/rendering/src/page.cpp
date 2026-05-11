@@ -2,14 +2,14 @@
 
 Page::Page(
     MatrixPanel_I2S_DMA *display,
-    std::shared_ptr<std::vector<TextRow>> rows)
+    std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> rows)
     : Page::Page(display, rows, 1)
 {
 }
 
 Page::Page(
     MatrixPanel_I2S_DMA *display,
-    std::shared_ptr<std::vector<TextRow>> rows,
+    std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> rows,
     size_t gap)
     : pageDirty(true), rows(rows), display(display), gap(gap)
 {
@@ -29,7 +29,7 @@ bool Page::isDirty()
 
     for (size_t i = 0; i < rows->size(); i++)
     {
-        if ((*rows)[i].isDirty())
+        if ((*rows)[i]->isDirty())
         {
             return true;
         }
@@ -40,13 +40,18 @@ bool Page::isDirty()
 
 void Page::render()
 {
+    for (size_t i = 0; i < rows->size(); i++)
+    {
+        (*(*rows)[i]).tick();
+    }
     if (isDirty())
     {
         display->clearScreen();
         Serial.println(rows->size());
         for (size_t i = 0; i < rows->size(); i++)
         {
-            renderRow((*rows)[i], i);
+            positionRow(*(*rows)[i], i);
+            renderRow(*(*rows)[i], i);
         }
     }
     pageDirty = false;
@@ -105,7 +110,7 @@ int16_t Page::getWidthOfTextItem(const Text &text, int16_t x, int16_t y)
     return w;
 }
 
-void Page::renderRow(TextRow &row, uint8_t index)
+void Page::positionRow(RenderableText &row, uint8_t index)
 {
     auto raw = row.rowString();
     display->setTextSize(row.fontSize());
@@ -113,14 +118,16 @@ void Page::renderRow(TextRow &row, uint8_t index)
     auto widthOffset = getWidthOffsetForCentre(raw.c_str());
     auto heightOffset = getHeightOffsetForCentre(raw.c_str(), index, rows->size());
 
-    display->setCursor(widthOffset, heightOffset);
+    row.setX(widthOffset);
+    row.setY(heightOffset);
+}
+
+void Page::renderRow(RenderableText &row, uint8_t index)
+{
+    display->setCursor(row.x(), row.y());
 
     for (size_t i = 0; i < row.size(); i++)
     {
-
-        Serial.println();
-        Serial.printf("content: %s, x: %d, y: %d", row[i].content(), widthOffset, heightOffset);
-        Serial.println();
 
         display->setTextColor(
             display->color565(
@@ -132,4 +139,6 @@ void Page::renderRow(TextRow &row, uint8_t index)
 
         row[i].markRendered();
     }
+
+    row.markRendered();
 }

@@ -6,16 +6,18 @@
 
 class MediaDisplay
 {
+private:
     bool playing;
-    std::shared_ptr<std::vector<TextRow>> rows;
+    std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> rows;
 
 public:
-    MediaDisplay(
-        MatrixPanel_I2S_DMA *display);
+    MediaDisplay(MatrixPanel_I2S_DMA *display, size_t displayWidth);
+
     void tick(String title, String artist);
     void setPlaying(bool playing);
     void force();
-    std::shared_ptr<std::vector<TextRow>> getText();
+
+    std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> getText();
 };
 
 #endif
