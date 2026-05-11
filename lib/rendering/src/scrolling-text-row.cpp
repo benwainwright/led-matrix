@@ -1,7 +1,7 @@
 
 #include "scrolling-text-row.h"
 
-ScrollingTextRow::ScrollingTextRow(std::shared_ptr<RenderableText> row, size_t scrollInterval, int16_t maxWidth) : parent(row), scrollPosition(0), scrollInterval(scrollInterval), maxWidth(maxWidth), nextFrame(0), dirtyFromScroll(false) {}
+ScrollingTextRow::ScrollingTextRow(std::shared_ptr<RenderableText> row, size_t scrollInterval, int16_t maxWidth) : parent(row), scrollInterval(scrollInterval), maxWidth(maxWidth), nextFrame(0), dirtyFromScroll(false), scrollPosition(0) {}
 
 size_t ScrollingTextRow::size()
 {
@@ -33,13 +33,13 @@ void ScrollingTextRow::tick()
         if (now > nextFrame)
         {
             nextFrame = now + scrollInterval;
-            if (x() < maxWidth)
+            if (scrollPosition > -renderedWidth)
             {
-                scrollPosition += 1;
+                scrollPosition -= 1;
             }
             else
             {
-                scrollPosition = -(renderedWidth - -parent->x());
+                scrollPosition = maxWidth;
             }
             dirtyFromScroll = true;
         }
@@ -60,7 +60,7 @@ int16_t ScrollingTextRow::x()
 {
     if (parent->getRenderedWidth() > maxWidth)
     {
-        return parent->x() + scrollPosition;
+        return scrollPosition;
     }
     else
     {
