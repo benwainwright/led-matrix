@@ -27,7 +27,7 @@ public:
     State(PubSubClient *initClient);
     void initialise();
     void receiveMqttMessage(char *topic, byte *message, unsigned int length);
-    u_int8_t brightness();
+    uint8_t brightness();
     String page();
     String title();
     String artist();

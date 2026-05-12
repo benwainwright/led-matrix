@@ -7,7 +7,7 @@
 
 #define HOMEASSISTANT_STATUS_TOPIC "homeassistant/status"
 
-class MqttEntity : BaseMqttEntity
+class MqttEntity : public BaseMqttEntity
 {
 private:
     PubSubClient *client;

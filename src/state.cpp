@@ -101,7 +101,7 @@ void State::receiveMqttMessage(char *topic, byte *message, unsigned int length)
     }
 }
 
-u_int8_t State::brightness()
+uint8_t State::brightness()
 {
 
     auto rawState = brightnessControl.state();

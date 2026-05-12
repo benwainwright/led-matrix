@@ -18,11 +18,11 @@ public:
         const char *friendlyName,
         const char *discoveryPrefix);
 
-    void initialise();
-    String state();
-    void receiveMqttMessage(char *topic, byte *message, unsigned int length);
-    String id() const;
-    JsonDocument config() const;
+    void initialise() override;
+    String state() override;
+    void receiveMqttMessage(char *topic, byte *message, unsigned int length) override;
+    String id() const override;
+    JsonDocument config() const override;
 };
 
 #endif

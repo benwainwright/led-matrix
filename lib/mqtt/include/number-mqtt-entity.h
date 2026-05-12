@@ -19,12 +19,12 @@ public:
         const char *deviceClass,
         const char *defaultState);
 
-    void initialise();
+    void initialise() override;
     void setState(const String &state);
-    String state();
-    void receiveMqttMessage(char *topic, byte *message, unsigned int length);
-    String id() const;
-    JsonDocument config() const;
+    String state() override;
+    void receiveMqttMessage(char *topic, byte *message, unsigned int length) override;
+    String id() const override;
+    JsonDocument config() const override;
 };
 
 #endif
