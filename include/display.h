@@ -1,7 +1,9 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
-void initDisplay();
+#include "app.h"
+
+void initDisplay(App *app);
 void displayLoop(void *parameter);
 
 #endif

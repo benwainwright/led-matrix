@@ -15,7 +15,7 @@ class Clock
 {
 
 private:
-    String withLeadingZeros(int number);
+    String withLeadingZeros(int number) const;
     std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> row;
 
 public:
@@ -23,7 +23,6 @@ public:
 
     void tick();
     void init();
-    void forceRerender();
     Text &operator[](size_t index);
     std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> getText();
 };

@@ -10,12 +10,12 @@
 class ScrollingTextRow : public RenderableText
 {
 private:
-    bool dirtyFromScroll;
     std::shared_ptr<RenderableText> parent;
-    int16_t scrollPosition;
     size_t scrollInterval;
     int16_t maxWidth;
     unsigned long nextFrame;
+    bool dirtyFromScroll;
+    int16_t scrollPosition;
     int16_t getRenderedWidth();
 
 public:

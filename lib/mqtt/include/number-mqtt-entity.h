@@ -20,11 +20,11 @@ public:
         const char *defaultState);
 
     void initialise();
-    void setState(String state);
+    void setState(const String &state);
     String state();
     void receiveMqttMessage(char *topic, byte *message, unsigned int length);
-    String id();
-    JsonDocument config();
+    String id() const;
+    JsonDocument config() const;
 };
 
 #endif

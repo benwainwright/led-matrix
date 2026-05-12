@@ -57,7 +57,7 @@ void MqttDevice::triggerDiscovery()
     Serial.println(published ? "succeeded" : "failed");
 }
 
-bool MqttDevice::compareMessage(byte *message, const char *expected, unsigned int length)
+bool MqttDevice::compareMessage(byte *message, const char *expected, unsigned int length) const
 {
 
     return (length == strlen(expected) &&

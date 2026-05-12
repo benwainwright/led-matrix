@@ -12,9 +12,9 @@ private:
     bool dirty;
 
 public:
-    Text(String content, Color color, size_t fontSize);
-    Text(String content, Color color);
-    void setContent(String content);
+    Text(const String& content, Color color, size_t fontSize);
+    Text(const String& content, Color color);
+    void setContent(const String &content);
     String content() const;
     void setColor(Color color);
     Color color() const;

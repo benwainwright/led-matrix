@@ -13,9 +13,8 @@ private:
 public:
     MediaDisplay(std::shared_ptr<MatrixPanel_I2S_DMA> display, size_t displayWidth);
 
-    void tick(String title, String artist);
+    void tick(const String &title, const String &artist);
     void setPlaying(bool playing);
-    void force();
 
     std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> getText();
 };

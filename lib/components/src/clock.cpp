@@ -16,7 +16,7 @@ Clock::Clock(std::shared_ptr<MatrixPanel_I2S_DMA> display)
 {
 }
 
-String Clock::withLeadingZeros(int number)
+String Clock::withLeadingZeros(int number) const
 {
     if (number < 10)
     {
@@ -46,10 +46,6 @@ void Clock::tick()
 std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> Clock::getText()
 {
     return row;
-}
-
-void Clock::forceRerender()
-{
 }
 
 void Clock::init()

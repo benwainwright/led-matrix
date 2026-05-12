@@ -21,10 +21,10 @@ public:
         std::vector<const char *> options,
         const char *defaultState);
 
-    JsonDocument config();
+    JsonDocument config() const;
     void initialise();
-    void setState(String state);
-    String id();
+    void setState(const String &state);
+    String id() const;
 
     String state();
     void receiveMqttMessage(char *topic, byte *message, unsigned int length);

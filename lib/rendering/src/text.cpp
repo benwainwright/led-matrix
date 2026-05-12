@@ -2,7 +2,7 @@
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 #include "text.h"
 
-Text::Text(String content, Color color) : contentValue(content), colorValue(color), dirty(true) {}
+Text::Text(const String &content, Color color) : contentValue(content), colorValue(color), dirty(true) {}
 
 void Text::setColor(Color color)
 {
@@ -13,7 +13,7 @@ void Text::setColor(Color color)
     colorValue = color;
 }
 
-void Text::setContent(String content)
+void Text::setContent(const String &content)
 {
     if (contentValue != content)
     {

@@ -40,19 +40,19 @@ MqttEntity::MqttEntity(
     commandTopic = discoveryPrefix + slash + uniqueId + slash + type + slash + deviceClassString + "set";
 }
 
-void MqttEntity::addAdditionalConfiguration(JsonDocument config)
+void MqttEntity::addAdditionalConfiguration(const JsonDocument &config)
 {
     additionalConfig = config;
 }
 
-bool MqttEntity::compareMessage(byte *message, const char *expected, unsigned int length)
+bool MqttEntity::compareMessage(byte *message, const char *expected, unsigned int length) const
 {
 
     return (length == strlen(expected) &&
             memcmp(message, expected, length) == 0);
 }
 
-JsonDocument MqttEntity::config()
+JsonDocument MqttEntity::config() const
 {
     String slash = "/";
 
@@ -109,7 +109,7 @@ void MqttEntity::initialise()
     client->publish(stateTopic.c_str(), currentState.c_str(), currentState.length());
 }
 
-void MqttEntity::setState(String state)
+void MqttEntity::setState(const String &state)
 {
     client->publish(stateTopic.c_str(), state.c_str(), state.length());
     if (!ensureMutex())
@@ -140,7 +140,7 @@ String MqttEntity::state()
     return snapshot;
 }
 
-String MqttEntity::id()
+String MqttEntity::id() const
 {
     return String(uniqueId);
 }

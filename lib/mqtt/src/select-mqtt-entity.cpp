@@ -28,7 +28,7 @@ SelectMqttEntity::SelectMqttEntity(
     entity.addAdditionalConfiguration(config);
 }
 
-JsonDocument SelectMqttEntity::config()
+JsonDocument SelectMqttEntity::config() const
 {
     return entity.config();
 }
@@ -38,12 +38,12 @@ void SelectMqttEntity::initialise()
     entity.initialise();
 }
 
-void SelectMqttEntity::setState(String state)
+void SelectMqttEntity::setState(const String &state)
 {
     entity.setState(state);
 }
 
-String SelectMqttEntity::id()
+String SelectMqttEntity::id() const
 {
     return entity.id();
 }

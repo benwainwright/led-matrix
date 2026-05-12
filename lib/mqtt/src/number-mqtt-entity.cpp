@@ -26,17 +26,17 @@ void NumberMqttEntity::initialise()
     entity.initialise();
 }
 
-JsonDocument NumberMqttEntity::config()
+JsonDocument NumberMqttEntity::config() const
 {
     return entity.config();
 }
 
-void NumberMqttEntity::setState(String state)
+void NumberMqttEntity::setState(const String &state)
 {
     entity.setState(state);
 }
 
-String NumberMqttEntity::id()
+String NumberMqttEntity::id() const
 {
     return entity.id();
 }

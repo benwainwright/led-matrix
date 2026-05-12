@@ -7,6 +7,7 @@
 class RenderableText
 {
 public:
+    virtual ~RenderableText() = default;
     virtual Text &operator[](size_t index) = 0;
     virtual size_t fontSize() = 0;
     virtual int16_t x() = 0;

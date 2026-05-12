@@ -24,12 +24,12 @@ void NotifyMqttEntity::initialise()
     entity.initialise();
 }
 
-JsonDocument NotifyMqttEntity::config()
+JsonDocument NotifyMqttEntity::config() const
 {
     return entity.config();
 }
 
-String NotifyMqttEntity::id()
+String NotifyMqttEntity::id() const
 {
     return entity.id();
 }

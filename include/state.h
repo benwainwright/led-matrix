@@ -11,14 +11,14 @@ class State
 
 private:
     PubSubClient *client;
-    String mediaTitle;
-    String mediaArtist;
     bool mediaPlaying;
     SemaphoreHandle_t mutex;
-    MqttDevice device;
     NumberMqttEntity brightnessControl;
     SelectMqttEntity pageSelector;
     NotifyMqttEntity notifyEntity;
+    MqttDevice device;
+    String mediaTitle;
+    String mediaArtist;
     String notification;
 
     bool ensureMutex();

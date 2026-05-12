@@ -24,17 +24,10 @@ private:
     String stateTopic;
     String commandTopic;
 
-    bool compareMessage(byte *message, const char *expected, unsigned int length);
+    bool compareMessage(byte *message, const char *expected, unsigned int length) const;
     bool ensureMutex();
 
 public:
-    String state();
-    void setState(String state);
-    void receiveMqttMessage(char *topic, byte *message, unsigned int length);
-    void addAdditionalConfiguration(JsonDocument config);
-    JsonDocument config();
-    String id();
-
     MqttEntity(
         PubSubClient *client,
         const char *uniqueId,
@@ -43,6 +36,14 @@ public:
         const char *deviceClass,
         const char *defaultState,
         const char *type);
+
+    String state();
+    JsonDocument config() const;
+    String id() const;
+
+    void setState(const String &state);
+    void receiveMqttMessage(char *topic, byte *message, unsigned int length);
+    void addAdditionalConfiguration(const JsonDocument &config);
 
     void initialise();
 };

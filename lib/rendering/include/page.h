@@ -10,9 +10,9 @@ class Page
 {
 private:
     bool pageDirty;
-    size_t gap;
     std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> rows;
     std::shared_ptr<MatrixPanel_I2S_DMA> display;
+    size_t gap;
     void renderRow(RenderableText &row, uint8_t index);
     void positionRow(RenderableText &row, uint8_t index);
     int16_t getHeightOffsetForCentre(const char *message, uint8_t index, uint8_t count);

@@ -5,6 +5,7 @@
 #include "app.h"
 #include "andala.h"
 
+#include "display.h"
 #include <Adafruit_GFX.h>
 
 void initDisplay(App *app)

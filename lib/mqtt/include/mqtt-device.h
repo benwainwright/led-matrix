@@ -17,8 +17,9 @@ private:
     const char *originName;
     const char *swVersion;
     const char *supportUrl;
+
     bool ensureMutex();
-    bool compareMessage(byte *message, const char *expected, unsigned int length);
+    bool compareMessage(byte *message, const char *expected, unsigned int length) const;
     void triggerDiscovery();
 
 public:

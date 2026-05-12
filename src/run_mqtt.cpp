@@ -40,7 +40,7 @@ void setupMqtt(App *app)
   app->mqtt.setServer(mqttServer, 1883);
   app->mqtt.setBufferSize(1024);
   app->mqtt.setCallback(
-      [&](char *topic, byte *message, unsigned int length)
+      [app](char *topic, byte *message, unsigned int length)
       {
         vTaskDelay(pdMS_TO_TICKS(100));
         Serial.print("Message arrived on topic: ");

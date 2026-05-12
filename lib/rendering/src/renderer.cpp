@@ -11,6 +11,10 @@ void Renderer::render()
 
 void Renderer::showPage(uint8_t pageNumber)
 {
+    if (pageNumber >= pages.size())
+    {
+        return;
+    }
     if (page != pageNumber)
     {
         pages[pageNumber].setDirty();

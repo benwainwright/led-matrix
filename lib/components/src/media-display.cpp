@@ -25,7 +25,7 @@ MediaDisplay::MediaDisplay(std::shared_ptr<MatrixPanel_I2S_DMA> display, size_t 
 {
 }
 
-void MediaDisplay::tick(String title, String artist)
+void MediaDisplay::tick(const String &title, const String &artist)
 {
     (*(*rows)[0])[0].setContent(artist);
     (*(*rows)[1])[0].setContent(title);
@@ -39,8 +39,4 @@ void MediaDisplay::setPlaying(bool isPlaying)
 std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> MediaDisplay::getText()
 {
     return rows;
-}
-
-void MediaDisplay::force()
-{
 }
