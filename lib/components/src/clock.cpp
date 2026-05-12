@@ -2,7 +2,7 @@
 #include <time.h>
 #include "clock.h"
 
-Clock::Clock(MatrixPanel_I2S_DMA *display)
+Clock::Clock(std::shared_ptr<MatrixPanel_I2S_DMA> display)
     :
 
       row(std::make_shared<std::vector<std::shared_ptr<RenderableText>>>(

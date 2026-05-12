@@ -1,15 +1,11 @@
-#include "globals.h"
 #include "wifi_setup.h"
 #include "display.h"
 #include <Mqtt.h>
 #include "data.h"
 
-WiFiClient espClient;
-PubSubClient client(espClient);
-std::unique_ptr<MatrixPanel_I2S_DMA> display;
-TaskHandle_t finishedDataInitialisationHandle;
+#include "app.h"
 
-State state = State(&client);
+static App app;
 
 void setup()
 {
@@ -23,9 +19,9 @@ void setup()
           displayLoop,
           "Display Loop",
           4096,
-          nullptr,
+          &app,
           1,
-          &finishedDataInitialisationHandle,
+          &app.finishedDataInitialisationHandle,
           0) != pdPASS)
   {
     Serial.println("Failed to create display task");
@@ -36,7 +32,7 @@ void setup()
           dataLoop,
           "Data Task",
           4096,
-          nullptr,
+          &app,
           1,
           nullptr,
           1) != pdPASS)

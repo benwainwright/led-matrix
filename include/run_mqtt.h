@@ -1,10 +1,9 @@
 #ifndef MQTT_H
 #define MQTT_H
 
-#include "globals.h"
+#include "app.h"
 
-void maintainMqttConnection();
-void setupMqtt();
-void messageReceivedCallback(char *topic, byte *message, unsigned int length);
+void maintainMqttConnection(App *app);
+void setupMqtt(App *app);
 
 #endif

@@ -27,7 +27,7 @@ State::State(PubSubClient *initClient) : client(initClient),
 
                                          notifyEntity({NotifyMqttEntity(
                                              initClient,
-                                             "led-matrix-page",
+                                             "led-matrix-notify",
                                              "Page",
                                              "homeassistant")
 

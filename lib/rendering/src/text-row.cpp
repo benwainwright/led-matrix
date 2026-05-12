@@ -1,7 +1,7 @@
 #include "text-row.h"
 
-TextRow::TextRow(MatrixPanel_I2S_DMA *display, std::vector<Text> row) : TextRow(display, row, 1) {}
-TextRow::TextRow(MatrixPanel_I2S_DMA *display, std::vector<Text> row, size_t fontSize) : row(row), fontSizeValue(fontSize), xValue(0), yValue(0), display(display) {}
+TextRow::TextRow(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::vector<Text> row) : TextRow(display, row, 1) {}
+TextRow::TextRow(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::vector<Text> row, size_t fontSize) : row(row), fontSizeValue(fontSize), xValue(0), yValue(0), display(display) {}
 
 size_t TextRow::size()
 {

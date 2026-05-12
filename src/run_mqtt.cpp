@@ -1,27 +1,19 @@
-#include "globals.h"
+#include "run_mqtt.h"
+#include <Arduino.h>
 
-void messageReceivedCallback(char *topic, byte *message, unsigned int length)
-{
-  vTaskDelay(pdMS_TO_TICKS(100));
-  Serial.print("Message arrived on topic: ");
-  Serial.print(topic);
-  Serial.println();
-  state.receiveMqttMessage(topic, message, length);
-}
-
-void maintainMqttConnection()
+void maintainMqttConnection(App *app)
 {
   bool connectedThisCall = false;
 
-  if (!client.connected())
+  if (!app->mqtt.connected())
   {
     vTaskDelay(pdMS_TO_TICKS(100));
   }
 
-  while (!client.connected())
+  while (!app->mqtt.connected())
   {
     Serial.print("Attempting MQTT connection...");
-    if (client.connect("ESP8266Client", mqttUser, mqttPass))
+    if (app->mqtt.connect("ESP8266Client", mqttUser, mqttPass))
     {
       Serial.println("connected");
       connectedThisCall = true;
@@ -29,7 +21,7 @@ void maintainMqttConnection()
     else
     {
       Serial.print("failed, rc=");
-      Serial.print(client.state());
+      Serial.print(app->mqtt.state());
       Serial.println(" try again in 5 seconds");
       vTaskDelay(pdMS_TO_TICKS(5000));
     }
@@ -37,16 +29,24 @@ void maintainMqttConnection()
 
   if (connectedThisCall)
   {
-    state.initialise();
+    app->state.initialise();
   }
 
-  client.loop();
+  app->mqtt.loop();
 }
 
-void setupMqtt()
+void setupMqtt(App *app)
 {
-  client.setServer(mqttServer, 1883);
-  client.setBufferSize(1024);
-  client.setCallback(messageReceivedCallback);
-  maintainMqttConnection();
+  app->mqtt.setServer(mqttServer, 1883);
+  app->mqtt.setBufferSize(1024);
+  app->mqtt.setCallback(
+      [&](char *topic, byte *message, unsigned int length)
+      {
+        vTaskDelay(pdMS_TO_TICKS(100));
+        Serial.print("Message arrived on topic: ");
+        Serial.print(topic);
+        Serial.println();
+        app->state.receiveMqttMessage(topic, message, length);
+      });
+  maintainMqttConnection(app);
 }

@@ -12,7 +12,7 @@ private:
     bool pageDirty;
     size_t gap;
     std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> rows;
-    MatrixPanel_I2S_DMA *display;
+    std::shared_ptr<MatrixPanel_I2S_DMA> display;
     void renderRow(RenderableText &row, uint8_t index);
     void positionRow(RenderableText &row, uint8_t index);
     int16_t getHeightOffsetForCentre(const char *message, uint8_t index, uint8_t count);
@@ -22,10 +22,10 @@ private:
 
 public:
     Page(
-        MatrixPanel_I2S_DMA *display,
+        std::shared_ptr<MatrixPanel_I2S_DMA> display,
         std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> rows);
     Page(
-        MatrixPanel_I2S_DMA *display,
+        std::shared_ptr<MatrixPanel_I2S_DMA> display,
         std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> rows, size_t gap);
     void setRow(uint8_t rowNumber, std::vector<Text> row);
     void render();

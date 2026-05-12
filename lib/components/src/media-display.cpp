@@ -1,7 +1,7 @@
 #include "media-display.h"
 #include "scrolling-text-row.h"
 
-MediaDisplay::MediaDisplay(MatrixPanel_I2S_DMA *display, size_t displayWidth)
+MediaDisplay::MediaDisplay(std::shared_ptr<MatrixPanel_I2S_DMA> display, size_t displayWidth)
 
     : playing(false),
       rows(std::make_shared<std::vector<std::shared_ptr<RenderableText>>>(

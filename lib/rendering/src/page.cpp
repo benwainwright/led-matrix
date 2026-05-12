@@ -1,14 +1,14 @@
 #include "page.h"
 
 Page::Page(
-    MatrixPanel_I2S_DMA *display,
+    std::shared_ptr<MatrixPanel_I2S_DMA> display,
     std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> rows)
     : Page::Page(display, rows, 1)
 {
 }
 
 Page::Page(
-    MatrixPanel_I2S_DMA *display,
+    std::shared_ptr<MatrixPanel_I2S_DMA> display,
     std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> rows,
     size_t gap)
     : pageDirty(true), rows(rows), display(display), gap(gap)

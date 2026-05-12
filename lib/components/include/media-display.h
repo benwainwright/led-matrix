@@ -11,7 +11,7 @@ private:
     std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> rows;
 
 public:
-    MediaDisplay(MatrixPanel_I2S_DMA *display, size_t displayWidth);
+    MediaDisplay(std::shared_ptr<MatrixPanel_I2S_DMA> display, size_t displayWidth);
 
     void tick(String title, String artist);
     void setPlaying(bool playing);

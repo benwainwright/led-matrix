@@ -19,9 +19,8 @@ private:
     std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> row;
 
 public:
-    Clock(MatrixPanel_I2S_DMA *display);
+    Clock(std::shared_ptr<MatrixPanel_I2S_DMA> display);
 
-    void setDisplay(MatrixPanel_I2S_DMA *display);
     void tick();
     void init();
     void forceRerender();

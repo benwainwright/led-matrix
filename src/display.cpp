@@ -1,13 +1,13 @@
 #include <Arduino.h>
-#include "globals.h"
 #include "constants.h"
 #include <Components.h>
 #include <Rendering.h>
+#include "app.h"
 #include "andala.h"
 
 #include <Adafruit_GFX.h>
 
-void initDisplay()
+void initDisplay(App *app)
 {
     HUB75_I2S_CFG::i2s_pins _pins = {
         R1_PIN,
@@ -51,34 +51,37 @@ void initDisplay()
     mxconfig.min_refresh_rate = 120;
     mxconfig.i2sspeed = HUB75_I2S_CFG::HZ_16M;
 
-    display = std::make_unique<MatrixPanel_I2S_DMA>(mxconfig);
-    display->begin();
-    display->setFont(&andala4pt7b);
+    app->display = std::make_shared<MatrixPanel_I2S_DMA>(mxconfig);
+    app->display->begin();
+    app->display->setFont(&andala4pt7b);
 }
 
 void displayLoop(void *parameter)
+
 {
-    initDisplay();
+    App *app = static_cast<App *>(parameter);
+
+    initDisplay(app);
 
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-    auto clock = Clock(display.get());
+    auto clock = Clock(app->display);
     clock.init();
-    auto media = MediaDisplay(display.get(), DISPLAY_WIDTH);
+    auto media = MediaDisplay(app->display, DISPLAY_WIDTH);
 
-    auto clockPage = Page(display.get(), clock.getText());
-    auto mediaPage = Page(display.get(), media.getText(), 2);
+    auto clockPage = Page(app->display, clock.getText());
+    auto mediaPage = Page(app->display, media.getText(), 2);
 
     auto renderer = Renderer({clockPage, mediaPage});
 
     while (true)
     {
         clock.tick();
-        media.tick(state.title(), state.artist());
+        media.tick(app->state.title(), app->state.artist());
 
-        display->setBrightness8(state.brightness());
+        app->display->setBrightness8(app->state.brightness());
 
-        const String requestedPage = state.page();
+        const String requestedPage = app->state.page();
 
         if (requestedPage == String(CLOCK_PAGE))
         {
