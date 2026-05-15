@@ -1,5 +1,6 @@
 #include "data.h"
 #include <Arduino.h>
+#include <Config.h>
 #include <Components.h>
 #include <Mqtt.h>
 #include "run_mqtt.h"
@@ -8,10 +9,12 @@
 
 void dataLoop(void *parameter)
 {
+
     App *app = static_cast<App *>(parameter);
     Serial.println("Initialising data loop");
     vTaskDelay(pdMS_TO_TICKS(1000));
     setupWifi();
+    app->config.start();
     setupMqtt(app);
     if (app->finishedDataInitialisationHandle == nullptr)
     {

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "language": "en-GB",
+  "userWords": [
+    "ifndef",
+    "Pagebuilder"
+  ],
+  "words": [
+    "mqtt",
+    "println",
+    "wifi"
+  ]
+}

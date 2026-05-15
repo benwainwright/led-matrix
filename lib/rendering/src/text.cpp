@@ -27,7 +27,7 @@ Color Text::color() const
     return colorValue;
 }
 
-String Text::content() const
+const String& Text::content() const
 {
     return contentValue;
 }

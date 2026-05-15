@@ -1,0 +1,12 @@
+{
+  "$schema": "https://raw.githubusercontent.com/platformio/platformio-core/develop/platformio/assets/schema/library.json",
+  "name": "config",
+  "version": "1.0.0",
+  "description": "An esp32 configuration webserver",
+  "keywords": ["config"],
+  "headers": ["Config.h"],
+  "build": {
+    "srcDir": "src",
+    "includeDir": "include"
+  }
+}

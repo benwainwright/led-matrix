@@ -1,0 +1,27 @@
+// Folder-specific settings
+//
+// For a full list of overridable settings, and general information on folder-specific settings,
+// see the documentation: https://zed.dev/docs/configuring-zed#settings-files
+{
+  "format_on_save": "on",
+  "lsp": {
+    // Folder-specific settings
+    "clangd": {
+      "binary": {
+        "path": "clangd",
+        "arguments": [
+          "--background-index",
+          "--clang-tidy",
+          "--completion-style=detailed",
+          "--header-insertion=never",
+          "--log=error",
+          "--query-driver=/Users/benwainwright/.platformio/packages/toolchain-xtensa-esp32/bin/xtensa-esp32-elf-*",
+        ],
+      },
+      "initialization_options": {
+        "compilationDatabasePath": ".",
+        "fallbackFlags": ["-std=c++11"],
+      },
+    },
+  },
+}

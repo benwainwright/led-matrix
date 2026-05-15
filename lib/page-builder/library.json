@@ -1,0 +1,12 @@
+{
+  "$schema": "https://raw.githubusercontent.com/platformio/platformio-core/develop/platformio/assets/schema/library.json",
+  "name": "page-builder",
+  "version": "1.0.0",
+  "description": "A library to generate HTML pages",
+  "keywords": ["html"],
+  "headers": ["Pagebuilder.h"],
+  "build": {
+    "srcDir": "src",
+    "includeDir": "include"
+  }
+}
