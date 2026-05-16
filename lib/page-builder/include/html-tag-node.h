@@ -18,14 +18,6 @@ public:
   HtmlTagNode(std::string name, std::vector<std::unique_ptr<HtmlNode>> nodes,
               std::map<std::string, std::string> attributes);
 
-  HtmlTagNode(std::string name, std::map<std::string, std::string> attributes);
-
-  HtmlTagNode(std::string name, std::vector<std::unique_ptr<HtmlNode>> nodes);
-
-  HtmlTagNode(std::string name, std::string textContent);
-
-  HtmlTagNode(std::string name);
-
   void render(std::ostream& out) const override;
 };
 

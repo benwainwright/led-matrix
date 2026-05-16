@@ -1,5 +1,5 @@
-#ifndef TEXT_H
-#define TEXT_H
+#ifndef TEXT_FUNC_H
+#define TEXT_FUNC_H
 
 #include "color.h"
 #include <Arduino.h>

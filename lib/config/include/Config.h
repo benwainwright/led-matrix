@@ -1,3 +1,5 @@
 #include "field.h"
 #include "form.h"
+#include "select-field.h"
 #include "server.h"
+#include "text-field.h"

@@ -3,7 +3,7 @@
 #include <string>
 
 struct SelectOption {
-  std::string name;
+  std::string label;
   std::string value;
 };
 

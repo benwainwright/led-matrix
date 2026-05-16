@@ -22,14 +22,19 @@
 #define DISPLAY_WIDTH 64
 #define DISPLAY_HEIGHT 32
 
-char constexpr *hostName = "led-screen";
+#define HOSTNAME "bedroom-screen"
 
-inline const char *ssid = "Ben's Flat (2.4Ghz)";
-inline const char *password = "7ct3hqKA4y37";
+#define WIFI_SSID_FIELD_NAME "wifi-ssid"
+#define WIFI_PASSWORD_FIELD_NAME "wifi-password"
+#define MQTT_USER_FIELD_NAME "mqtt-user"
+#define MQTT_PASS_FIELD_NAME "mqtt-pass"
+#define MQTT_SERVER_FIELD_NAME "mqtt-server"
+#define WEB_SERVER_HOST_NAME_FIELD_NAME "server-host"
+#define AP_SSID "led-screen-ap"
 
-inline const char *mqttUser = "screen";
-inline const char *mqttPass = "5nW~Um_iqm56";
-inline const char *mqttServer = "192.168.1.143";
+#define WIFI_SCAN_INTERVAL_SECONDS 30
+#define SKIPPED_SCAN -1
+#define SCAN_RUNNING -2
 
 #define CLOCK_PAGE "clock"
 #define MEDIA_PAGE "media"

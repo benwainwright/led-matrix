@@ -30,7 +30,6 @@ void Page::render() {
   }
   if (isDirty()) {
     display->clearScreen();
-    Serial.println(rows->size());
     for (size_t i = 0; i < rows->size(); i++) {
       positionRow(*(*rows)[i], i);
       renderRow(*(*rows)[i], i);

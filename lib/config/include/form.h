@@ -11,8 +11,12 @@ private:
 
 public:
   std::unique_ptr<HtmlNode> markup() const;
-  Form(std::vector<std::unique_ptr<Field>> fields);
+  Form() = default;
   void render(std::ostream& out);
+  void hydrate();
   void handleSubmission(const std::string& formData);
+  const std::string& getValue(const std::string& key);
+
+  void setFields(std::vector<std::unique_ptr<Field>> fields);
 };
 #endif

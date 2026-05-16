@@ -6,8 +6,11 @@
 
 class ConfigServer {
 public:
-  ConfigServer(std::unique_ptr<Form> form);
+  ConfigServer();
   void start();
+  void setForm(std::unique_ptr<Form> form);
+  const std::string& getValue(const std::string& key);
+  Form& getForm() const;
 
 private:
   httpd_handle_t server;

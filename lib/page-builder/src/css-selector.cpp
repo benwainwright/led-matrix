@@ -8,6 +8,7 @@ void CssSelector::render(std::ostream& out) const {
   out << selector << " {\n";
 
   for (auto& declaration : declarations) {
+    out << "  ";
     declaration.render(out);
   }
 

@@ -11,10 +11,15 @@
 std::unique_ptr<HtmlTagNode> tag(std::string name, std::vector<std::unique_ptr<HtmlNode>> nodes,
                                  std::map<std::string, std::string> attributes);
 
+std::unique_ptr<HtmlTagNode> tag(std::string name, std::map<std::string, std::string> attributes,
+                                 std::vector<std::unique_ptr<HtmlNode>> nodes);
+
 std::unique_ptr<HtmlTagNode> tag(std::string name, std::map<std::string, std::string> attributes);
 
 std::unique_ptr<HtmlTagNode> tag(std::string name, std::vector<std::unique_ptr<HtmlNode>> nodes);
 
 std::unique_ptr<HtmlTagNode> tag(std::string name, std::string textContent);
+
+std::unique_ptr<HtmlTagNode> tag(std::string name);
 
 #endif

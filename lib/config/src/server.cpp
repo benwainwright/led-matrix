@@ -7,7 +7,7 @@
 #include "pageMarkup.h"
 #include "server.h"
 
-ConfigServer::ConfigServer(std::unique_ptr<Form> form) : server(nullptr), form(std::move(form)) {}
+ConfigServer::ConfigServer() {}
 
 esp_err_t ConfigServer::handlePost(httpd_req_t* request) {
   std::string response;
@@ -19,12 +19,16 @@ esp_err_t ConfigServer::handlePost(httpd_req_t* request) {
     response.append(buffer, received);
   }
   form->handleSubmission(response);
+  ESP.restart();
   return ESP_OK;
 }
+
+Form& ConfigServer::getForm() const { return *form; }
 
 esp_err_t ConfigServer::handleGet(httpd_req_t* request)
 
 {
+
   std::ostringstream markup;
 
   auto html = pageMarkup(form->markup());
@@ -38,6 +42,8 @@ esp_err_t ConfigServer::handleGet(httpd_req_t* request)
 
 void ConfigServer::start() {
   httpd_config_t config = HTTPD_DEFAULT_CONFIG();
+
+  form->hydrate();
 
   if (httpd_start(&server, &config) == ESP_OK) {
 
@@ -61,3 +67,6 @@ void ConfigServer::start() {
     httpd_register_uri_handler(server, &uri_post);
   }
 }
+const std::string& ConfigServer::getValue(const std::string& key) { return form->getValue(key); }
+
+void ConfigServer::setForm(std::unique_ptr<Form> form) { this->form = std::move(form); }

@@ -1,15 +1,20 @@
 #include "field.h"
 
-std::string Field::value() const {
+Field::Field(const std::string& defaultValue) : defaultValue(defaultValue) {}
+
+const std::string& Field::value() {
   Preferences preferences;
   if (!preferences.begin("config", true)) {
     Serial.println("Failed to open preferences for reading");
-    return "";
+    return defaultValue;
   }
 
-  String storedValue = preferences.getString(name().c_str(), "");
+  fieldValue = preferences.getString(name().c_str(), "").c_str();
   preferences.end();
-  return std::string(storedValue.c_str());
+  if (fieldValue == "") {
+    return defaultValue;
+  }
+  return fieldValue;
 }
 
 void Field::handle(const std::string& value) {

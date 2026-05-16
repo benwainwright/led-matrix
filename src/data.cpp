@@ -8,21 +8,27 @@
 #include <Mqtt.h>
 
 void dataLoop(void* parameter) {
-
-  App* app = static_cast<App*>(parameter);
+  auto app = static_cast<App*>(parameter);
   Serial.println("Initialising data loop");
   vTaskDelay(pdMS_TO_TICKS(1000));
-  setupWifi();
+  setupConfigServer(app);
+  auto wifiResult = setupWifi(app);
   app->config.start();
-  setupMqtt(app);
-  if (app->finishedDataInitialisationHandle == nullptr) {
-    Serial.println("Display task handle is not available");
+  if (!wifiResult) {
+    while (true) {
+      app->dns.processNextRequest();
+    }
   } else {
-    xTaskNotifyGive(app->finishedDataInitialisationHandle);
-  }
+    setupMqtt(app);
+    if (app->finishedDataInitialisationHandle == nullptr) {
+      Serial.println("Display task handle is not available");
+    } else {
+      xTaskNotifyGive(app->finishedDataInitialisationHandle);
+    }
 
-  while (true) {
-    maintainMqttConnection(app);
-    vTaskDelay(pdMS_TO_TICKS(100));
+    while (true) {
+      maintainMqttConnection(app);
+      vTaskDelay(pdMS_TO_TICKS(100));
+    }
   }
 }
