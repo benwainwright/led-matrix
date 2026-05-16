@@ -15,7 +15,7 @@ class Clock {
 
 private:
   String withLeadingZeros(int number) const;
-  std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> row;
+  std::vector<std::shared_ptr<RenderableText>> row;
 
 public:
   Clock(std::shared_ptr<MatrixPanel_I2S_DMA> display);
@@ -23,7 +23,7 @@ public:
   void tick();
   void init();
   Text& operator[](size_t index);
-  std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> getText();
+  std::vector<std::shared_ptr<RenderableText>> getText();
 };
 
 #endif

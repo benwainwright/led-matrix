@@ -1,11 +1,11 @@
 #include "page.h"
 
 Page::Page(std::shared_ptr<MatrixPanel_I2S_DMA> display,
-           std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> rows)
+           std::vector<std::shared_ptr<RenderableText>> rows)
     : Page::Page(display, rows, 1) {}
 
 Page::Page(std::shared_ptr<MatrixPanel_I2S_DMA> display,
-           std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> rows, size_t gap)
+           std::vector<std::shared_ptr<RenderableText>> rows, size_t gap)
     : pageDirty(true), rows(rows), display(display), gap(gap) {}
 
 void Page::setDirty() { pageDirty = true; }
@@ -15,8 +15,8 @@ bool Page::isDirty() {
     return true;
   }
 
-  for (size_t i = 0; i < rows->size(); i++) {
-    if ((*rows)[i]->isDirty()) {
+  for (size_t i = 0; i < rows.size(); i++) {
+    if ((rows)[i]->isDirty()) {
       return true;
     }
   }
@@ -25,14 +25,14 @@ bool Page::isDirty() {
 }
 
 void Page::render() {
-  for (size_t i = 0; i < rows->size(); i++) {
-    (*(*rows)[i]).tick();
+  for (size_t i = 0; i < rows.size(); i++) {
+    (*(rows)[i]).tick();
   }
   if (isDirty()) {
     display->clearScreen();
-    for (size_t i = 0; i < rows->size(); i++) {
-      positionRow(*(*rows)[i], i);
-      renderRow(*(*rows)[i], i);
+    for (size_t i = 0; i < rows.size(); i++) {
+      positionRow(*(rows)[i], i);
+      renderRow(*(rows)[i], i);
     }
   }
   pageDirty = false;
@@ -90,7 +90,7 @@ void Page::positionRow(RenderableText& row, uint8_t index) {
   display->setTextSize(row.fontSize());
   display->setTextWrap(false);
   auto widthOffset = getWidthOffsetForCentre(raw.c_str());
-  auto heightOffset = getHeightOffsetForCentre(raw.c_str(), index, rows->size());
+  auto heightOffset = getHeightOffsetForCentre(raw.c_str(), index, rows.size());
 
   row.setX(widthOffset);
   row.setY(heightOffset);

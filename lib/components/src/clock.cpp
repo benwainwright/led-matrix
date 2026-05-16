@@ -5,12 +5,11 @@
 Clock::Clock(std::shared_ptr<MatrixPanel_I2S_DMA> display)
     :
 
-      row(std::make_shared<std::vector<std::shared_ptr<RenderableText>>>(
-          std::initializer_list<std::shared_ptr<RenderableText>>{std::make_shared<TextRow>(
-              display,
-              std::vector<Text>{Text("00", Color{255, 255, 255}), Text(":", Color{0, 100, 100}),
-                                Text("00", Color{255, 255, 255})},
-              2)})) {}
+      row(std::initializer_list<std::shared_ptr<RenderableText>>{std::make_shared<TextRow>(
+          display,
+          std::vector<Text>{Text("00", Color{255, 255, 255}), Text(":", Color{0, 100, 100}),
+                            Text("00", Color{255, 255, 255})},
+          2)}) {}
 
 String Clock::withLeadingZeros(int number) const {
   if (number < 10) {
@@ -31,10 +30,10 @@ void Clock::tick() {
   String hours = withLeadingZeros(timeinfo.tm_hour);
   String minutes = withLeadingZeros(timeinfo.tm_min);
 
-  (*(*row)[0])[0].setContent(hours);
-  (*(*row)[0])[2].setContent(minutes);
+  (*(row)[0])[0].setContent(hours);
+  (*(row)[0])[2].setContent(minutes);
 }
 
-std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> Clock::getText() { return row; }
+std::vector<std::shared_ptr<RenderableText>> Clock::getText() { return row; }
 
 void Clock::init() { configTime(gmtOffset_sec, daylightOffset_sec, ntpServer); }

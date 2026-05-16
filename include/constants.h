@@ -30,6 +30,8 @@
 #define MQTT_PASS_FIELD_NAME "mqtt-pass"
 #define MQTT_SERVER_FIELD_NAME "mqtt-server"
 #define WEB_SERVER_HOST_NAME_FIELD_NAME "server-host"
+#define RTT_TOKEN_FIELD_NAME "rtt-trains"
+#define RTT_STATION_CODE_FIELD_NAME "rtt-station"
 #define AP_SSID "led-screen-ap"
 
 #define WIFI_SCAN_INTERVAL_SECONDS 30
@@ -38,5 +40,6 @@
 
 #define CLOCK_PAGE "clock"
 #define MEDIA_PAGE "media"
+#define TRAINS_PAGE "trains"
 
 #endif

@@ -27,7 +27,7 @@ void MqttDevice::triggerDiscovery() {
 
   config["dev"]["name"] = name;
   config["dev"]["ids"] = deviceId;
-  config["dev"]["availability_topic"] = availabilityTopic;
+  config["availability_topic"] = availabilityTopic;
   config["origin"]["name"] = originName;
   config["origin"]["sw_version"] = swVersion;
   config["origin"]["support_url"] = supportUrl;

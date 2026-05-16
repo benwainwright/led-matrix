@@ -66,6 +66,9 @@ void setupConfigServer(App* app) {
   fields.push_back(std::make_unique<TextField>(MQTT_SERVER_FIELD_NAME, "MQTT Host"));
   fields.push_back(std::make_unique<TextField>(WEB_SERVER_HOST_NAME_FIELD_NAME, "Hostname", "text",
                                                "bedroom-screen"));
+  fields.push_back(std::make_unique<TextField>(RTT_TOKEN_FIELD_NAME, "RTT Token"));
+  fields.push_back(std::make_unique<TextField>(RTT_STATION_CODE_FIELD_NAME, "RTT Station Code"));
+
   form->setFields(std::move(fields));
   app->config.setForm(std::move(form));
 }

@@ -49,20 +49,25 @@ void displayLoop(void* parameter)
 
   initDisplay(app);
 
-  ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+  xEventGroupWaitBits(app->finishedDataInitialisationEventGroup, DATA_READY_BIT, pdFALSE, pdFALSE,
+                      portMAX_DELAY);
 
   auto clock = Clock(app->display);
   clock.init();
   auto media = MediaDisplay(app->display, DISPLAY_WIDTH);
 
+  auto trains = DeparturesBoard(app->display, DISPLAY_WIDTH);
+
   auto clockPage = Page(app->display, clock.getText());
   auto mediaPage = Page(app->display, media.getText(), 2);
+  auto trainsPage = Page(app->display, trains.getText());
 
-  auto renderer = Renderer({clockPage, mediaPage});
+  auto renderer = Renderer({clockPage, mediaPage, trainsPage});
 
   while (true) {
     clock.tick();
     media.tick(app->state.title(), app->state.artist());
+    trains.tick(app->departures);
 
     app->display->setBrightness8(app->state.brightness());
 
@@ -72,6 +77,8 @@ void displayLoop(void* parameter)
       renderer.showPage(0);
     } else if (requestedPage == String(MEDIA_PAGE)) {
       renderer.showPage(1);
+    } else if (requestedPage == String(TRAINS_PAGE)) {
+      renderer.showPage(2);
     }
 
     renderer.render();

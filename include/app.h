@@ -7,6 +7,7 @@
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 #include <PubSubClient.h>
 #include <WiFi.h>
+#include <rtt.h>
 #include <string>
 
 struct App {
@@ -14,13 +15,16 @@ struct App {
   PubSubClient mqtt;
   ConfigServer config;
   DNSServer dns;
+  std::vector<Departure> departures;
   bool accessPointModeOn;
   std::shared_ptr<MatrixPanel_I2S_DMA> display;
-  TaskHandle_t finishedDataInitialisationHandle;
+  EventGroupHandle_t finishedDataInitialisationEventGroup;
   State state;
   App()
       : wifi(), mqtt(wifi), accessPointModeOn(false), display(nullptr),
-        finishedDataInitialisationHandle(nullptr), state(&mqtt) {}
+        finishedDataInitialisationEventGroup(nullptr), state(&mqtt) {}
 };
+
+#define DATA_READY_BIT BIT0
 
 #endif

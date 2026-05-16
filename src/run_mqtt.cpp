@@ -42,7 +42,7 @@ void setupMqtt(App* app) {
   auto host = app->config.getValue(MQTT_SERVER_FIELD_NAME);
   Serial.printf("MQTT Server set to %s\n", host.c_str());
   app->mqtt.setServer(host.c_str(), 1883);
-  app->mqtt.setBufferSize(1024);
+  app->mqtt.setBufferSize(2048);
   app->mqtt.setCallback([app](char* topic, byte* message, unsigned int length) {
     vTaskDelay(pdMS_TO_TICKS(100));
     Serial.print("Message arrived on topic: ");

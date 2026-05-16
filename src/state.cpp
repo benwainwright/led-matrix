@@ -9,7 +9,7 @@ State::State(PubSubClient* initClient)
                                          "homeassistant", nullptr, "100")),
 
       pageSelector(SelectMqttEntity(initClient, "led-matrix-page", "Page", "homeassistant", nullptr,
-                                    {CLOCK_PAGE, MEDIA_PAGE}, CLOCK_PAGE)),
+                                    {CLOCK_PAGE, MEDIA_PAGE, TRAINS_PAGE}, CLOCK_PAGE)),
 
       notifyEntity({NotifyMqttEntity(initClient, "led-matrix-notify", "Page", "homeassistant")
 

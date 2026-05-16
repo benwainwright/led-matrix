@@ -20,11 +20,7 @@ void dataLoop(void* parameter) {
     }
   } else {
     setupMqtt(app);
-    if (app->finishedDataInitialisationHandle == nullptr) {
-      Serial.println("Display task handle is not available");
-    } else {
-      xTaskNotifyGive(app->finishedDataInitialisationHandle);
-    }
+    xEventGroupSetBits(app->finishedDataInitialisationEventGroup, DATA_READY_BIT);
 
     while (true) {
       maintainMqttConnection(app);

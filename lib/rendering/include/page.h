@@ -9,7 +9,7 @@
 class Page {
 private:
   bool pageDirty;
-  std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> rows;
+  std::vector<std::shared_ptr<RenderableText>> rows;
   std::shared_ptr<MatrixPanel_I2S_DMA> display;
   size_t gap;
   void renderRow(RenderableText& row, uint8_t index);
@@ -21,9 +21,9 @@ private:
 
 public:
   Page(std::shared_ptr<MatrixPanel_I2S_DMA> display,
-       std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> rows);
+       std::vector<std::shared_ptr<RenderableText>> rows);
   Page(std::shared_ptr<MatrixPanel_I2S_DMA> display,
-       std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> rows, size_t gap);
+       std::vector<std::shared_ptr<RenderableText>> rows, size_t gap);
   void setRow(uint8_t rowNumber, std::vector<Text> row);
   void render();
   void setDirty();

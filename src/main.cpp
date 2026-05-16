@@ -1,9 +1,10 @@
-#include "data.h"
-#include "display.h"
-#include "wifi_setup.h"
 #include <Mqtt.h>
 
 #include "app.h"
+#include "data.h"
+#include "display.h"
+#include "run_trains_loop.h"
+#include "wifi_setup.h"
 
 static App app;
 
@@ -14,13 +15,18 @@ void setup() {
 
   pinMode(LED_BUILTIN, OUTPUT);
 
-  if (xTaskCreatePinnedToCore(displayLoop, "Display Loop", 4096, &app, 1,
-                              &app.finishedDataInitialisationHandle, 0) != pdPASS) {
+  app.finishedDataInitialisationEventGroup = xEventGroupCreate();
+
+  if (xTaskCreatePinnedToCore(displayLoop, "Display Loop", 4096, &app, 3, nullptr, 0) != pdPASS) {
     Serial.println("Failed to create display task");
     return;
   }
 
-  if (xTaskCreatePinnedToCore(dataLoop, "Data Task", 4096, &app, 1, nullptr, 1) != pdPASS) {
+  if (xTaskCreate(runTrainLoop, "Trains Task", 12288, &app, 1, nullptr) != pdPASS) {
+    Serial.println("Failed to create data task");
+  }
+
+  if (xTaskCreate(dataLoop, "Data Task", 4096, &app, 1, nullptr) != pdPASS) {
     Serial.println("Failed to create data task");
   }
 }
