@@ -22,13 +22,14 @@
 #define DISPLAY_WIDTH 64
 #define DISPLAY_HEIGHT 32
 
+char constexpr *hostName = "led-screen";
+
 inline const char *ssid = "Ben's Flat (2.4Ghz)";
 inline const char *password = "7ct3hqKA4y37";
 
 inline const char *mqttUser = "screen";
 inline const char *mqttPass = "5nW~Um_iqm56";
 inline const char *mqttServer = "192.168.1.143";
-
 
 #define CLOCK_PAGE "clock"
 #define MEDIA_PAGE "media"

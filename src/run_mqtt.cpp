@@ -1,7 +1,7 @@
 #include "run_mqtt.h"
 #include <Arduino.h>
 
-void maintainMqttConnection(App *app) {
+void maintainMqttConnection(App* app) {
   bool connectedThisCall = false;
 
   if (!app->mqtt.connected()) {
@@ -28,10 +28,10 @@ void maintainMqttConnection(App *app) {
   app->mqtt.loop();
 }
 
-void setupMqtt(App *app) {
+void setupMqtt(App* app) {
   app->mqtt.setServer(mqttServer, 1883);
   app->mqtt.setBufferSize(1024);
-  app->mqtt.setCallback([app](char *topic, byte *message, unsigned int length) {
+  app->mqtt.setCallback([app](char* topic, byte* message, unsigned int length) {
     vTaskDelay(pdMS_TO_TICKS(100));
     Serial.print("Message arrived on topic: ");
     Serial.print(topic);

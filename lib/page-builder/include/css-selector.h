@@ -3,19 +3,18 @@
 
 #include <vector>
 
-#include "html-node.h"
 #include "css-declaration.h"
+#include "html-node.h"
 
-class CssSelector : public HtmlNode
-{
+class CssSelector : public HtmlNode {
 private:
-    std::string selector;
-    std::vector<CssDeclaration> declarations;
+  std::string selector;
+  std::vector<CssDeclaration> declarations;
 
 public:
-    CssSelector(std::string selector, std::vector<CssDeclaration>);
+  CssSelector(std::string selector, std::vector<CssDeclaration>);
 
-    void render(std::ostream &out) const;
+  void render(std::ostream& out) const;
 };
 
 #endif

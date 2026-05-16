@@ -1,8 +1,8 @@
 #ifndef FORMDATA_H
 #define FORMDATA_H
 
-#include <string>
 #include <map>
-std::string urlDecode(const std::string &value);
-std::map<std::string, std::string> parseFormData(const std::string &formData);
+#include <string>
+std::string urlDecode(const std::string& value);
+std::map<std::string, std::string> parseFormData(const std::string& formData);
 #endif

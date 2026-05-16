@@ -3,14 +3,13 @@
 
 #include <string>
 
-class CssDeclaration
-{
-    std::string property;
-    std::string value;
+class CssDeclaration {
+  std::string property;
+  std::string value;
 
 public:
-    CssDeclaration(std::string property, std::string value);
-    void render(std::ostream &out) const;
+  CssDeclaration(std::string property, std::string value);
+  void render(std::ostream& out) const;
 };
 
 #endif

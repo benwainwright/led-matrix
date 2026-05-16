@@ -1,6 +1,6 @@
+#include "color.h"
 #include "page.h"
 #include "renderable-text.h"
 #include "renderer.h"
 #include "text-row.h"
 #include "text.h"
-#include "color.h"

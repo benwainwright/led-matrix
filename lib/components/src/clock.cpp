@@ -1,54 +1,40 @@
+#include "clock.h"
 #include <Arduino.h>
 #include <time.h>
-#include "clock.h"
 
 Clock::Clock(std::shared_ptr<MatrixPanel_I2S_DMA> display)
     :
 
       row(std::make_shared<std::vector<std::shared_ptr<RenderableText>>>(
-          std::initializer_list<std::shared_ptr<RenderableText>>{
-              std::make_shared<TextRow>(
-                  display,
-                  std::vector<Text>{Text("00", Color{255, 255, 255}),
-                                    Text(":", Color{0, 100, 100}),
-                                    Text("00", Color{255, 255, 255})},
-                  2)}))
-{
+          std::initializer_list<std::shared_ptr<RenderableText>>{std::make_shared<TextRow>(
+              display,
+              std::vector<Text>{Text("00", Color{255, 255, 255}), Text(":", Color{0, 100, 100}),
+                                Text("00", Color{255, 255, 255})},
+              2)})) {}
+
+String Clock::withLeadingZeros(int number) const {
+  if (number < 10) {
+    return "0" + String(number);
+  }
+
+  return String(number);
 }
 
-String Clock::withLeadingZeros(int number) const
-{
-    if (number < 10)
-    {
-        return "0" + String(number);
-    }
+void Clock::tick() {
+  struct tm timeinfo;
 
-    return String(number);
+  if (!getLocalTime(&timeinfo)) {
+    Serial.println("Failed to obtain time");
+    return;
+  }
+
+  String hours = withLeadingZeros(timeinfo.tm_hour);
+  String minutes = withLeadingZeros(timeinfo.tm_min);
+
+  (*(*row)[0])[0].setContent(hours);
+  (*(*row)[0])[2].setContent(minutes);
 }
 
-void Clock::tick()
-{
-    struct tm timeinfo;
+std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> Clock::getText() { return row; }
 
-    if (!getLocalTime(&timeinfo))
-    {
-        Serial.println("Failed to obtain time");
-        return;
-    }
-
-    String hours = withLeadingZeros(timeinfo.tm_hour);
-    String minutes = withLeadingZeros(timeinfo.tm_min);
-
-    (*(*row)[0])[0].setContent(hours);
-    (*(*row)[0])[2].setContent(minutes);
-}
-
-std::shared_ptr<std::vector<std::shared_ptr<RenderableText>>> Clock::getText()
-{
-    return row;
-}
-
-void Clock::init()
-{
-    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
-}
+void Clock::init() { configTime(gmtOffset_sec, daylightOffset_sec, ntpServer); }

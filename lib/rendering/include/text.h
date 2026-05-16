@@ -1,24 +1,23 @@
 #ifndef TEXT_H
 #define TEXT_H
 
-#include <Arduino.h>
 #include "color.h"
+#include <Arduino.h>
 
-class Text
-{
+class Text {
 private:
-    String contentValue;
-    Color colorValue;
-    bool dirty;
+  String contentValue;
+  Color colorValue;
+  bool dirty;
 
 public:
-    Text(const String &content, Color color);
-    void setContent(const String &content);
-    const String &content() const;
-    void setColor(Color color);
-    Color color() const;
-    bool isDirty() const;
-    void markRendered();
+  Text(const String& content, Color color);
+  void setContent(const String& content);
+  const String& content() const;
+  void setColor(Color color);
+  Color color() const;
+  bool isDirty() const;
+  void markRendered();
 };
 
 #endif

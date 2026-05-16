@@ -1,12 +1,11 @@
-#include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <gtest/gtest.h>
 
-int main(int argc, char **argv)
-{
-    ::testing::InitGoogleMock();
+int main(int argc, char** argv) {
+  ::testing::InitGoogleMock();
 
-    if (RUN_ALL_TESTS())
-        ;
+  if (RUN_ALL_TESTS())
+    ;
 
-    return 0;
+  return 0;
 }

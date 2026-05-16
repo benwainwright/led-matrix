@@ -1,32 +1,26 @@
 #ifndef SELECT_ENTITY_H
 #define SELECT_ENTITY_H
 
-#include <PubSubClient.h>
-#include "mqtt-entity.h"
 #include "base-mqtt-entity.h"
+#include "mqtt-entity.h"
+#include <PubSubClient.h>
 
-class SelectMqttEntity : public BaseMqttEntity
-{
+class SelectMqttEntity : public BaseMqttEntity {
 
 private:
-    MqttEntity entity;
+  MqttEntity entity;
 
 public:
-    SelectMqttEntity(
-        PubSubClient *client,
-        const char *uniqueId,
-        const char *friendlyName,
-        const char *discoveryPrefix,
-        const char *deviceClass,
-        std::vector<const char *> options,
-        const char *defaultState);
+  SelectMqttEntity(PubSubClient* client, const char* uniqueId, const char* friendlyName,
+                   const char* discoveryPrefix, const char* deviceClass,
+                   std::vector<const char*> options, const char* defaultState);
 
-    JsonDocument config() const override;
-    void initialise() override;
-    void setState(const String &state);
-    String id() const override;
+  JsonDocument config() const override;
+  void initialise() override;
+  void setState(const String& state);
+  String id() const override;
 
-    String state();
-    void receiveMqttMessage(char *topic, byte *message, unsigned int length) override;
+  String state();
+  void receiveMqttMessage(char* topic, byte* message, unsigned int length) override;
 };
 #endif
