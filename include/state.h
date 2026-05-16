@@ -3,14 +3,15 @@
 
 #include <Arduino.h>
 
+#include "constants.h"
 #include <Mqtt.h>
 
-#include "constants.h"
+class App;
 
 class State {
 
 private:
-  PubSubClient *client;
+  PubSubClient* client;
   bool mediaPlaying;
   SemaphoreHandle_t mutex;
   NumberMqttEntity brightnessControl;
@@ -18,15 +19,18 @@ private:
   NotifyMqttEntity notifyEntity;
   MqttDevice device;
   String mediaTitle;
+  std::string artistTopic;
+  std::string titleTopic;
+  std::string statusTopic;
   String mediaArtist;
   String notification;
 
   bool ensureMutex();
 
 public:
-  State(PubSubClient *initClient);
-  void initialise();
-  void receiveMqttMessage(char *topic, byte *message, unsigned int length);
+  State(PubSubClient* initClient);
+  void initialise(App* app);
+  void receiveMqttMessage(char* topic, byte* message, unsigned int length);
   uint8_t brightness();
   String page();
   String title();

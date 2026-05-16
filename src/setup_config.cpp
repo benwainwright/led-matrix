@@ -68,6 +68,10 @@ void setupConfigServer(App* app) {
                                                "bedroom-screen"));
   fields.push_back(std::make_unique<TextField>(RTT_TOKEN_FIELD_NAME, "RTT Token"));
   fields.push_back(std::make_unique<TextField>(RTT_STATION_CODE_FIELD_NAME, "RTT Station Code"));
+  fields.push_back(
+      std::make_unique<TextField>(ARTISTS_TOPIC_FIELD_NAME, "Media Artist MQTT Topic"));
+  fields.push_back(std::make_unique<TextField>(TITLE_TOPIC_FIELD_NAME, "Media Title MQTT Topic"));
+  fields.push_back(std::make_unique<TextField>(STATUS_TOPIC_FIELD_NAME, "Media Status MQTT Topic"));
 
   form->setFields(std::move(fields));
   app->config.setForm(std::move(form));

@@ -32,7 +32,7 @@ void maintainMqttConnection(App* app) {
   }
 
   if (connectedThisCall) {
-    app->state.initialise();
+    app->state.initialise(app);
   }
 
   app->mqtt.loop();

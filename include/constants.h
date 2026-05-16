@@ -32,6 +32,9 @@
 #define WEB_SERVER_HOST_NAME_FIELD_NAME "server-host"
 #define RTT_TOKEN_FIELD_NAME "rtt-trains"
 #define RTT_STATION_CODE_FIELD_NAME "rtt-station"
+#define ARTISTS_TOPIC_FIELD_NAME "artist-topic"
+#define TITLE_TOPIC_FIELD_NAME "title-topic"
+#define STATUS_TOPIC_FIELD_NAME "status-topic"
 #define AP_SSID "led-screen-ap"
 
 #define WIFI_SCAN_INTERVAL_SECONDS 30

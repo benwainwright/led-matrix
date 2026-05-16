@@ -1,4 +1,5 @@
 #include "state.h"
+#include "app.h"
 #include "constants.h"
 #include <Arduino.h>
 #include <Mqtt.h>
@@ -32,11 +33,16 @@ bool State::ensureMutex() {
   return true;
 }
 
-void State::initialise() {
+void State::initialise(App* app) {
   device.initialise();
-  client->subscribe("homeassistant/media_players/media_player.living_room/artist");
-  client->subscribe("homeassistant/media_players/media_player.living_room/title");
-  client->subscribe("homeassistant/media_players/media_player.living_room/status");
+  artistTopic = app->config.getValue(ARTISTS_TOPIC_FIELD_NAME);
+  client->subscribe(artistTopic.c_str());
+
+  titleTopic = app->config.getValue(TITLE_TOPIC_FIELD_NAME);
+  client->subscribe(titleTopic.c_str());
+
+  statusTopic = app->config.getValue(STATUS_TOPIC_FIELD_NAME);
+  client->subscribe(statusTopic.c_str());
 }
 
 void State::receiveMqttMessage(char* topic, byte* message, unsigned int length) {
@@ -46,21 +52,21 @@ void State::receiveMqttMessage(char* topic, byte* message, unsigned int length) 
 
   device.receiveMqttMessage(topic, message, length);
   String snapshot = String((char*)message, length);
-  if (String(topic) == "homeassistant/media_players/media_player.living_room/artist") {
+  if (std::string(topic) == artistTopic) {
     if (xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE) {
       mediaArtist = snapshot;
       xSemaphoreGive(mutex);
     }
   }
 
-  if (String(topic) == "homeassistant/media_players/media_player.living_room/title") {
+  if (std::string(topic) == titleTopic) {
     if (xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE) {
       mediaTitle = snapshot;
       xSemaphoreGive(mutex);
     }
   }
 
-  if (String(topic) == "homeassistant/media_players/media_player.living_room/status") {
+  if (std::string(topic) == statusTopic) {
     if (xSemaphoreTake(mutex, portMAX_DELAY) == pdTRUE) {
       Serial.println(snapshot);
       mediaPlaying = snapshot == "playing";

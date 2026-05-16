@@ -10,7 +10,7 @@ std::unique_ptr<HtmlNode> pageMarkup(std::unique_ptr<HtmlNode> form) {
       "form div", std::initializer_list<CssDeclaration>{flex, gap, padding});
 
   auto labelWidth = CssDeclaration("width", "stretch");
-  auto labelMaxWidth = CssDeclaration("max-width", "8rem");
+  auto labelMaxWidth = CssDeclaration("max-width", "12rem");
   auto formRowLabel = std::make_unique<CssSelector>(
       "form div label", std::initializer_list<CssDeclaration>{labelWidth, labelMaxWidth});
 
