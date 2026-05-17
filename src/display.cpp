@@ -52,7 +52,7 @@ std::map<std::string, std::unique_ptr<Renderable>> setupRenderables(App* app) {
   auto updateDepartures = [app](DeparturesBoard& board) { board.setDepartures(app->departures); };
   renderables[TRAINS_PAGE] = std::make_unique<DeparturesBoard>(DISPLAY_WIDTH, updateDepartures);
 
-  renderables;
+  return renderables;
 }
 
 void displayLoop(void* parameter)

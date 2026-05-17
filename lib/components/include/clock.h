@@ -20,7 +20,6 @@ private:
 
 public:
   Clock();
-
   void tick() override;
   void init() override;
   Text& operator[](size_t index);

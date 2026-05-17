@@ -3,8 +3,7 @@
 Page::Page(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::unique_ptr<Renderable> rows)
     : Page::Page(display, std::move(rows), 1) {}
 
-Page::Page(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::unique_ptr<Renderable> rows,
-           size_t gap)
+Page::Page(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::unique_ptr<Renderable> rows, size_t gap)
     : pageDirty(true), rows(std::move(rows)), display(display), gap(gap) {}
 
 void Page::setDirty() { pageDirty = true; }
@@ -107,8 +106,7 @@ void Page::renderRow(RenderableText& row, uint8_t index) {
 
   for (size_t i = 0; i < row.size(); i++) {
 
-    display->setTextColor(
-        display->color565(row[i].color().red, row[i].color().green, row[i].color().blue));
+    display->setTextColor(display->color565(row[i].color().red, row[i].color().green, row[i].color().blue));
 
     display->print(row[i].content());
 
