@@ -2,11 +2,10 @@
 #include <Arduino.h>
 #include <time.h>
 
-Clock::Clock(std::shared_ptr<MatrixPanel_I2S_DMA> display)
+Clock::Clock()
     :
 
       row(std::initializer_list<std::shared_ptr<RenderableText>>{std::make_shared<TextRow>(
-          display,
           std::vector<Text>{Text("00", Color{255, 255, 255}), Text(":", Color{0, 100, 100}),
                             Text("00", Color{255, 255, 255})},
           2)}) {}

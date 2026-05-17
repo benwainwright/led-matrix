@@ -10,13 +10,15 @@ size_t ScrollingTextRow::size() { return parent->size(); }
 
 bool ScrollingTextRow::isDirty() const { return dirtyFromScroll || parent->isDirty(); }
 
-int16_t ScrollingTextRow::getRenderedWidth() { return parent->getRenderedWidth(); }
+int16_t ScrollingTextRow::getRenderedWidth(MatrixPanel_I2S_DMA* display) {
+  return parent->getRenderedWidth(display);
+}
 
 void ScrollingTextRow::setX(int16_t x) { parent->setX(x); }
 
-void ScrollingTextRow::tick() {
+void ScrollingTextRow::tick(MatrixPanel_I2S_DMA* display) {
   auto now = millis();
-  auto renderedWidth = parent->getRenderedWidth();
+  auto renderedWidth = parent->getRenderedWidth(display);
 
   if (renderedWidth > maxWidth) {
     if (now > nextFrame) {
@@ -28,6 +30,8 @@ void ScrollingTextRow::tick() {
       }
       dirtyFromScroll = true;
     }
+  } else {
+    scrollPosition = parent->x();
   }
 }
 
@@ -35,13 +39,7 @@ void ScrollingTextRow::markRendered() { dirtyFromScroll = false; }
 
 void ScrollingTextRow::setY(int16_t y) { parent->setY(y); }
 
-int16_t ScrollingTextRow::x() {
-  if (parent->getRenderedWidth() > maxWidth) {
-    return scrollPosition;
-  } else {
-    return parent->x();
-  }
-}
+int16_t ScrollingTextRow::x() { return scrollPosition; }
 
 int16_t ScrollingTextRow::y() { return parent->y(); }
 

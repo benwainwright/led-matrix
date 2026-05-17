@@ -3,16 +3,12 @@
 #include <string>
 #include <time.h>
 
-DepartureRow::DepartureRow(std::shared_ptr<MatrixPanel_I2S_DMA> display, size_t displayWidth
-
-                           )
+DepartureRow::DepartureRow(size_t displayWidth)
     : text(std::make_shared<ScrollingTextRow>(
-          std::make_shared<TextRow>(display,
-                                    std::vector<Text>{Text("00:00", Color{168, 130, 221}),
-                                                      Text(" ", Color{255, 255, 255}),
-                                                      Text("Station", Color{224, 141, 121}),
-                                                      Text(" ", Color{255, 255, 255}),
-                                                      Text("14", Color{179, 242, 221})}),
+          std::make_shared<TextRow>(std::vector<Text>{
+              Text("00:00", Color{168, 130, 221}), Text(" ", Color{255, 255, 255}),
+              Text("Station", Color{224, 141, 121}), Text(" ", Color{255, 255, 255}),
+              Text("14", Color{179, 242, 221})}),
           50, displayWidth)) {}
 
 String DepartureRow::withLeadingZeros(int number) const {

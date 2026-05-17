@@ -1,26 +1,30 @@
 #include "media-display.h"
 #include "scrolling-text-row.h"
 
-MediaDisplay::MediaDisplay(std::shared_ptr<MatrixPanel_I2S_DMA> display, size_t displayWidth)
-
+MediaDisplay::MediaDisplay(size_t displayWidth, std::function<void(MediaDisplay&)> onTick)
     : playing(false),
       rows(std::initializer_list<std::shared_ptr<RenderableText>>{
 
           std::make_shared<ScrollingTextRow>(
-              std::make_shared<TextRow>(display,
-                                        std::vector<Text>{Text("Artist", Color{150, 150, 150})}),
+              std::make_shared<TextRow>(std::vector<Text>{Text("Artist", Color{150, 150, 150})}),
               50, displayWidth),
 
           std::make_shared<ScrollingTextRow>(
-              std::make_shared<TextRow>(display,
-                                        std::vector<Text>{Text("Title", Color{255, 255, 255})}),
-              50, displayWidth)
+              std::make_shared<TextRow>(std::vector<Text>{Text("Title", Color{255, 255, 255})}), 50,
+              displayWidth)
 
-      }) {}
+      }),
+      onTick(onTick) {}
 
-void MediaDisplay::tick(const String& title, const String& artist) {
+void MediaDisplay::setMedia(const String& title, const String& artist) {
   (*(rows)[0])[0].setContent(artist);
   (*(rows)[1])[0].setContent(title);
+}
+
+void MediaDisplay::tick() {
+  if (onTick != nullptr) {
+    onTick(*this);
+  }
 }
 
 void MediaDisplay::setPlaying(bool isPlaying) { playing = isPlaying; }

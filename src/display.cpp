@@ -52,36 +52,25 @@ void displayLoop(void* parameter)
   xEventGroupWaitBits(app->finishedDataInitialisationEventGroup, DATA_READY_BIT, pdFALSE, pdFALSE,
                       portMAX_DELAY);
 
-  auto clock = Clock(app->display);
-  clock.init();
-  auto media = MediaDisplay(app->display, DISPLAY_WIDTH);
+  std::map<std::string, std::unique_ptr<Renderable>> renderables;
 
-  auto trains = DeparturesBoard(app->display, DISPLAY_WIDTH);
+  renderables[CLOCK_PAGE] = std::make_unique<Clock>();
 
-  auto clockPage = Page(app->display, clock.getText());
-  auto mediaPage = Page(app->display, media.getText(), 2);
-  auto trainsPage = Page(app->display, trains.getText());
+  renderables[MEDIA_PAGE] =
+      std::make_unique<MediaDisplay>(DISPLAY_WIDTH, [app](MediaDisplay& media) {
+        media.setMedia(app->state.title(), app->state.artist());
+      });
 
-  auto renderer = Renderer({clockPage, mediaPage, trainsPage});
+  renderables[TRAINS_PAGE] = std::make_unique<DeparturesBoard>(
+      DISPLAY_WIDTH, [app](DeparturesBoard& board) { board.setDepartures(app->departures); });
+
+  auto renderer = Renderer(app->display, std::move(renderables), CLOCK_PAGE);
+
+  renderer.init();
 
   while (true) {
-    clock.tick();
-    media.tick(app->state.title(), app->state.artist());
-    trains.tick(app->departures);
-
     app->display->setBrightness8(app->state.brightness());
-
-    const String requestedPage = app->state.page();
-
-    if (requestedPage == String(CLOCK_PAGE)) {
-      renderer.showPage(0);
-    } else if (requestedPage == String(MEDIA_PAGE)) {
-      renderer.showPage(1);
-    } else if (requestedPage == String(TRAINS_PAGE)) {
-      renderer.showPage(2);
-    }
-
-    renderer.render();
-    vTaskDelay(pdMS_TO_TICKS(10));
+    renderer.render(app->state.page().c_str());
+    vTaskDelay(pdMS_TO_TICKS(16));
   }
 }

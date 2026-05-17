@@ -2,16 +2,39 @@
 #include "page.h"
 #include <Arduino.h>
 
-Renderer::Renderer(std::vector<Page> pages) : pages(pages), page(0) {}
+Renderer::Renderer(std::shared_ptr<MatrixPanel_I2S_DMA> display,
+                   std::map<std::string, std::unique_ptr<Renderable>> renderables,
+                   std::string initialPage)
+    : page(initialPage) {
+  for (auto& renderable : renderables) {
+    pages.emplace(renderable.first, Page(display, std::move(renderable.second)));
+  }
+}
 
-void Renderer::render() { pages[page].render(); }
+void Renderer::render(std::string page) {
+  tick();
+  showPage(page);
+  pages.at(page).render();
+}
 
-void Renderer::showPage(uint8_t pageNumber) {
-  if (pageNumber >= pages.size()) {
+void Renderer::tick() {
+  for (auto& renderable : pages) {
+    renderable.second.tick();
+  }
+}
+
+void Renderer::init() {
+  for (auto& renderable : pages) {
+    renderable.second.init();
+  }
+}
+
+void Renderer::showPage(std::string page) {
+  if (!(pages.find(page) != pages.end())) {
     return;
   }
-  if (page != pageNumber) {
-    pages[pageNumber].setDirty();
+  if (page != this->page) {
+    pages.at(page).setDirty();
   }
-  page = pageNumber;
+  this->page = page;
 }

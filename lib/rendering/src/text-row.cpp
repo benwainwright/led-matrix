@@ -1,16 +1,12 @@
 #include "text-row.h"
 
-TextRow::TextRow(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::vector<Text> row)
-    : TextRow(display, row, 1) {}
-TextRow::TextRow(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::vector<Text> row,
-                 size_t fontSize)
-    : row(row), fontSizeValue(fontSize), xValue(0), yValue(0), display(display) {}
+TextRow::TextRow(std::vector<Text> row) : TextRow(row, 1) {}
+TextRow::TextRow(std::vector<Text> row, size_t fontSize)
+    : row(row), fontSizeValue(fontSize), xValue(0), yValue(0) {}
 
 size_t TextRow::size() { return row.size(); }
 
-int16_t TextRow::getRenderedWidth()
-
-{
+int16_t TextRow::getRenderedWidth(MatrixPanel_I2S_DMA* display) {
 
   if (display == nullptr) {
     return 0;

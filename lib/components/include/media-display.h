@@ -4,18 +4,21 @@
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 #include <Rendering.h>
 
-class MediaDisplay {
+#include "renderable.h"
+
+class MediaDisplay : public Renderable {
 private:
   bool playing;
   std::vector<std::shared_ptr<RenderableText>> rows;
+  std::function<void(MediaDisplay&)> onTick;
 
 public:
-  MediaDisplay(std::shared_ptr<MatrixPanel_I2S_DMA> display, size_t displayWidth);
-
-  void tick(const String& title, const String& artist);
+  MediaDisplay(size_t displayWidth, std::function<void(MediaDisplay&)> onTick = nullptr);
+  void setMedia(const String& title, const String& artist);
   void setPlaying(bool playing);
+  void tick() override;
 
-  std::vector<std::shared_ptr<RenderableText>> getText();
+  std::vector<std::shared_ptr<RenderableText>> getText() override;
 };
 
 #endif

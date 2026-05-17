@@ -15,11 +15,11 @@ private:
   unsigned long nextFrame;
   bool dirtyFromScroll;
   int16_t scrollPosition;
-  int16_t getRenderedWidth();
+  int16_t getRenderedWidth(MatrixPanel_I2S_DMA* display);
 
 public:
   ScrollingTextRow(std::shared_ptr<RenderableText> row, size_t scrollInterval, int16_t maxWidth);
-  void tick();
+  void tick(MatrixPanel_I2S_DMA* display) override;
   Text& operator[](size_t index);
   size_t fontSize();
   int16_t x();

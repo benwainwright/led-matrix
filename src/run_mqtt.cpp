@@ -10,12 +10,7 @@ void maintainMqttConnection(App* app) {
 
   if (mqttUser == "" || mqttPass == "" || mqttHost == "") {
     Serial.println("Mqtt details not configured");
-    vTaskDelay(pdMS_TO_TICKS(100));
     return;
-  }
-
-  if (!app->mqtt.connected()) {
-    vTaskDelay(pdMS_TO_TICKS(100));
   }
 
   while (!app->mqtt.connected()) {

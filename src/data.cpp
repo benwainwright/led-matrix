@@ -17,6 +17,7 @@ void dataLoop(void* parameter) {
   if (!wifiResult) {
     while (true) {
       app->dns.processNextRequest();
+      vTaskDelay(pdMS_TO_TICKS(10));
     }
   } else {
     setupMqtt(app);
@@ -24,7 +25,7 @@ void dataLoop(void* parameter) {
 
     while (true) {
       maintainMqttConnection(app);
-      vTaskDelay(pdMS_TO_TICKS(100));
+      vTaskDelay(pdMS_TO_TICKS(50));
     }
   }
 }

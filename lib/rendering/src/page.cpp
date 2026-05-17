@@ -1,22 +1,26 @@
 #include "page.h"
 
-Page::Page(std::shared_ptr<MatrixPanel_I2S_DMA> display,
-           std::vector<std::shared_ptr<RenderableText>> rows)
-    : Page::Page(display, rows, 1) {}
+Page::Page(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::unique_ptr<Renderable> rows)
+    : Page::Page(display, std::move(rows), 1) {}
 
-Page::Page(std::shared_ptr<MatrixPanel_I2S_DMA> display,
-           std::vector<std::shared_ptr<RenderableText>> rows, size_t gap)
-    : pageDirty(true), rows(rows), display(display), gap(gap) {}
+Page::Page(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::unique_ptr<Renderable> rows,
+           size_t gap)
+    : pageDirty(true), rows(std::move(rows)), display(display), gap(gap) {}
 
 void Page::setDirty() { pageDirty = true; }
+
+void Page::tick() { rows->tick(); }
+void Page::init() { rows->init(); }
 
 bool Page::isDirty() {
   if (pageDirty) {
     return true;
   }
 
-  for (size_t i = 0; i < rows.size(); i++) {
-    if ((rows)[i]->isDirty()) {
+  auto text = rows->getText();
+
+  for (size_t i = 0; i < text.size(); i++) {
+    if (text[i]->isDirty()) {
       return true;
     }
   }
@@ -25,14 +29,15 @@ bool Page::isDirty() {
 }
 
 void Page::render() {
-  for (size_t i = 0; i < rows.size(); i++) {
-    (*(rows)[i]).tick();
+  auto text = rows->getText();
+  for (size_t i = 0; i < text.size(); i++) {
+    text[i]->tick(display.get());
   }
   if (isDirty()) {
     display->clearScreen();
-    for (size_t i = 0; i < rows.size(); i++) {
-      positionRow(*(rows)[i], i);
-      renderRow(*(rows)[i], i);
+    for (size_t i = 0; i < text.size(); i++) {
+      positionRow(*text[i], i);
+      renderRow(*text[i], i);
     }
   }
   pageDirty = false;
@@ -86,11 +91,12 @@ int16_t Page::getWidthOfTextItem(const Text& text, int16_t x, int16_t y) {
 }
 
 void Page::positionRow(RenderableText& row, uint8_t index) {
+  auto text = rows->getText();
   auto raw = row.rowString();
   display->setTextSize(row.fontSize());
   display->setTextWrap(false);
   auto widthOffset = getWidthOffsetForCentre(raw.c_str());
-  auto heightOffset = getHeightOffsetForCentre(raw.c_str(), index, rows.size());
+  auto heightOffset = getHeightOffsetForCentre(raw.c_str(), index, text.size());
 
   row.setX(widthOffset);
   row.setY(heightOffset);

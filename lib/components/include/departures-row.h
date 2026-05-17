@@ -11,7 +11,7 @@ private:
   std::string toTime(time_t time) const;
 
 public:
-  DepartureRow(std::shared_ptr<MatrixPanel_I2S_DMA> display, size_t displayWidth);
+  DepartureRow(size_t displayWidth);
   void setContent(Departure departure);
   std::shared_ptr<RenderableText> getText();
 };

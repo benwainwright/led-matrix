@@ -1,20 +1,24 @@
 #include "departures-board.h"
 
-DeparturesBoard::DeparturesBoard(std::shared_ptr<MatrixPanel_I2S_DMA> display, size_t displayWidth)
+DeparturesBoard::DeparturesBoard(size_t displayWidth, std::function<void(DeparturesBoard&)> onTick)
     :
 
-      rows(std::vector<DepartureRow>{
-          DepartureRow(display, displayWidth), DepartureRow(display, displayWidth),
-          DepartureRow(display, displayWidth), DepartureRow(display, displayWidth)
+      rows(std::vector<DepartureRow>{DepartureRow(displayWidth), DepartureRow(displayWidth),
+                                     DepartureRow(displayWidth), DepartureRow(displayWidth)}),
+      onTick(onTick) {};
 
-      }) {};
-
-void DeparturesBoard::tick(std::vector<Departure> departures) {
+void DeparturesBoard::setDepartures(std::vector<Departure> departures) {
   if (departures.size() < 4) {
     return;
   }
   for (int i = 0; i < 4; i++) {
     rows[i].setContent(departures[i]);
+  }
+}
+
+void DeparturesBoard::tick() {
+  if (onTick != nullptr) {
+    onTick(*this);
   }
 }
 

@@ -11,12 +11,11 @@ private:
   size_t fontSizeValue;
   int16_t xValue;
   int16_t yValue;
-  std::shared_ptr<MatrixPanel_I2S_DMA> display;
-  int16_t getRenderedWidth();
+  int16_t getRenderedWidth(MatrixPanel_I2S_DMA* display);
 
 public:
-  TextRow(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::vector<Text> row);
-  TextRow(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::vector<Text> row, size_t fontSize);
+  TextRow(std::vector<Text> row);
+  TextRow(std::vector<Text> row, size_t fontSize);
   int16_t x();
   int16_t y();
   void setX(int16_t x);
