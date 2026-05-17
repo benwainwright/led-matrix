@@ -4,7 +4,7 @@
 #include <Adafruit_GFX.h>
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 
-TextRow::TextRow(std::vector<Text> row, Alignment alignment, size_t fontSize)
+TextRow::TextRow(std::vector<std::shared_ptr<RenderableText>> row, Alignment alignment, size_t fontSize)
     : row(row), alignmentValue(alignment), fontSizeValue(fontSize), xValue(0), yValue(0) {}
 
 size_t TextRow::size() { return row.size(); }
@@ -13,13 +13,13 @@ Alignment TextRow::alignment() { return this->alignmentValue; }
 
 void TextRow::dirtyRow() {
   for (size_t i = 0; i < row.size(); i++) {
-    row[i].setDirty();
+    row[i]->setDirty();
   }
 }
 
 bool TextRow::isDirty() const {
   for (size_t i = 0; i < row.size(); i++) {
-    if (row[i].isDirty()) {
+    if (row[i]->isDirty()) {
       return true;
     }
   }
@@ -34,7 +34,7 @@ int16_t TextRow::x() { return xValue; }
 int TextRow::totalWidth() {
   int width = 0;
   for (int i = 0; i < row.size(); i++) {
-    width += calculateWidth(row[i].content().c_str(), row[i].font(), fontSizeValue);
+    width += calculateWidth(row[i]->content().c_str(), row[i]->font(), fontSizeValue);
   }
 
   return width;
@@ -42,16 +42,22 @@ int TextRow::totalWidth() {
 
 int16_t TextRow::y() { return yValue; }
 
-Text& TextRow::operator[](size_t index) { return row[index]; }
+RenderableText& TextRow::operator[](size_t index) { return *row[index]; }
 
 String TextRow::rowString() const {
   String buffer;
 
   for (size_t i = 0; i < row.size(); i++) {
-    buffer += row[i].content();
+    buffer += row[i]->content();
   }
 
   return buffer;
+}
+
+void TextRow::tick(MatrixPanel_I2S_DMA* display) {
+  for (size_t i = 0; i < row.size(); i++) {
+    row[i]->tick();
+  }
 }
 
 size_t TextRow::fontSize() { return fontSizeValue; }

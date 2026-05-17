@@ -34,6 +34,7 @@ void ScrollingTextRow::tick(MatrixPanel_I2S_DMA* display) {
   }
 
   Serial.printf("scrollpos: %d\n", scrollPosition);
+  parent->tick(display);
 }
 
 void ScrollingTextRow::markRendered() { dirtyFromScroll = false; }
@@ -52,7 +53,7 @@ int16_t ScrollingTextRow::x() {
 
 int16_t ScrollingTextRow::y() { return parent->y(); }
 
-Text& ScrollingTextRow::operator[](size_t index) { return (*parent)[index]; }
+RenderableText& ScrollingTextRow::operator[](size_t index) { return (*parent)[index]; }
 
 String ScrollingTextRow::rowString() const { return parent->rowString(); }
 

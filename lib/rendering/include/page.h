@@ -20,12 +20,12 @@ private:
   void updateRow(RenderableTextRow& row, uint8_t index);
   void positionRowContents(RenderableTextRow& row, const GFXfont* defaultFont);
 
-  void clearText(Text& textItem, int size);
+  void clearText(RenderableText& textItem, int size);
   int16_t getHeightOffsetForCentre(int16_t x, int16_t y, const char* message, uint8_t index, uint8_t count,
                                    const GFXfont* font, size_t fontSize);
   int16_t getWidthOffsetForCentre(int16_t x, int16_t y, const char* message);
-  void renderText(Text& textItem, int size);
-  int16_t getWidthOfTextItem(const Text& text, int16_t x, int16_t y);
+  void renderText(RenderableText& textItem, int size);
+  int16_t getWidthOfTextItem(const RenderableText& text, int16_t x, int16_t y);
   bool isDirty();
 
 public:

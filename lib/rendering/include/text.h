@@ -3,20 +3,12 @@
 
 #include "alignment.h"
 #include "color.h"
+#include "renderable-text.h"
 #include <Adafruit_GFX.h>
 #include <Arduino.h>
 #include <optional>
 
-struct Coordinates {
-  int x;
-  int y;
-  int height;
-  int width;
-  int cursorX;
-  int cursorY;
-};
-
-class Text {
+class Text : public RenderableText {
 private:
   Coordinates oldPositionValue;
   Coordinates positionValue;
@@ -28,18 +20,18 @@ private:
 
 public:
   Text(const String& content, Color color, const GFXfont* font = nullptr);
-  void setContent(const String& content);
-  const String& content() const;
-  void setColor(Color color);
-  Color color() const;
-  void setDefaultFont(const GFXfont* font);
-  void setDirty();
-  Coordinates oldPosition();
-  Coordinates position();
-  void setPosition(Coordinates coords);
-  const GFXfont* font();
-  bool isDirty() const;
-  void markRendered();
+  void setContent(const String& content) override;
+  const String& content() const override;
+  void setColor(Color color) override;
+  Color color() const override;
+  void setDefaultFont(const GFXfont* font) override;
+  void setDirty() override;
+  Coordinates oldPosition() override;
+  Coordinates position() override;
+  void setPosition(Coordinates coords) override;
+  const GFXfont* font() override;
+  bool isDirty() const override;
+  void markRendered() override;
 };
 
 #endif

@@ -4,4 +4,5 @@
 #include "renderable.h"
 #include "renderer.h"
 #include "text-row.h"
+#include "blinking-text.h"
 #include "text.h"

@@ -3,6 +3,7 @@
 
 #include "alignment.h"
 #include "renderable-text-row.h"
+#include "renderable-text.h"
 #include "text.h"
 #include <Adafruit_GFX.h>
 #include <Arduino.h>
@@ -20,7 +21,7 @@ private:
 public:
   ScrollingTextRow(std::shared_ptr<RenderableTextRow> row, size_t scrollInterval, int16_t maxWidth);
   void tick(MatrixPanel_I2S_DMA* display) override;
-  Text& operator[](size_t index);
+  RenderableText& operator[](size_t index);
   void dirtyRow();
   size_t fontSize();
   int16_t x();

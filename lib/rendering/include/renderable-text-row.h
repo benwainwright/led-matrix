@@ -1,14 +1,15 @@
-#ifndef RENDERABLE_TEXT_H
-#define RENDERABLE_TEXT_H
+#ifndef RENDERABLE_TEXT_ROW_H
+#define RENDERABLE_TEXT_ROW_H
 
-#include "text.h"
+#include "alignment.h"
+#include "renderable-text.h"
 #include <Arduino.h>
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 
 class RenderableTextRow {
 public:
   virtual ~RenderableTextRow() = default;
-  virtual Text& operator[](size_t index) = 0;
+  virtual RenderableText& operator[](size_t index) = 0;
   virtual size_t fontSize() = 0;
   virtual Alignment alignment() = 0;
   virtual int16_t x() = 0;

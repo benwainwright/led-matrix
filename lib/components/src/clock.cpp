@@ -5,10 +5,13 @@
 Clock::Clock()
     :
 
-      row(std::initializer_list<std::shared_ptr<RenderableTextRow>>{
-          std::make_shared<TextRow>(std::vector<Text>{Text("00", Color{255, 255, 255}), Text(":", Color{0, 100, 100}),
-                                                      Text("00", Color{255, 255, 255})},
-                                    CENTRE, 2)}) {}
+      row(std::initializer_list<std::shared_ptr<RenderableTextRow>>{std::make_shared<TextRow>(
+          std::vector<std::shared_ptr<RenderableText>>{
+              std::make_shared<Text>("00", Color{255, 255, 255}),
+              std::make_shared<BlinkingText>(std::make_shared<Text>(":", Color{0, 100, 100}), Color{0, 51, 0}, 1000,
+                                             1000),
+              std::make_shared<Text>("00", Color{255, 255, 255})},
+          CENTRE, 2)}) {}
 
 String Clock::withLeadingZeros(int number) const {
   if (number < 10) {

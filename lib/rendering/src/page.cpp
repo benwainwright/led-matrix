@@ -86,7 +86,7 @@ int16_t Page::getHeightOffsetForCentre(int16_t x, int16_t y, const char* message
   return startY + (index * (lineHeight + gapHeight));
 }
 
-int16_t Page::getWidthOfTextItem(const Text& text, int16_t x, int16_t y) {
+int16_t Page::getWidthOfTextItem(const RenderableText& text, int16_t x, int16_t y) {
 
   if (display == nullptr) {
     return 0;
@@ -112,7 +112,7 @@ void Page::positionRowContents(RenderableTextRow& row, const GFXfont* defaultFon
       uint16_t w;
       uint16_t h;
 
-      Text& textItem = row[i];
+      auto& textItem = row[i];
       display->getTextBounds(textItem.content().c_str(), xPosition, row.y(), &x1, &y1, &w, &h);
       textItem.setPosition(Coordinates{x1, y1, h, w, xPosition, row.y()});
 
@@ -121,13 +121,13 @@ void Page::positionRowContents(RenderableTextRow& row, const GFXfont* defaultFon
   }
 }
 
-void Page::clearText(Text& textItem, int size) {
+void Page::clearText(RenderableText& textItem, int size) {
   display->setTextSize(size);
   display->fillRect(textItem.oldPosition().x, textItem.oldPosition().y, textItem.oldPosition().width,
                     textItem.oldPosition().height, 0);
 }
 
-void Page::renderText(Text& textItem, int size) {
+void Page::renderText(RenderableText& textItem, int size) {
   if (!textItem.isDirty()) {
     return;
   }

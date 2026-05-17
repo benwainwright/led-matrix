@@ -6,12 +6,16 @@ MediaDisplay::MediaDisplay(size_t displayWidth, std::function<void(MediaDisplay&
       rows(std::initializer_list<std::shared_ptr<RenderableTextRow>>{
 
           std::make_shared<ScrollingTextRow>(
-              std::make_shared<TextRow>(std::vector<Text>{Text("Artist", Color{150, 150, 150})}, CENTRE), 50,
-              displayWidth),
+              std::make_shared<TextRow>(
+                  std::vector<std::shared_ptr<RenderableText>>{std::make_shared<Text>("Artist", Color{150, 150, 150})},
+                  CENTRE),
+              50, displayWidth),
 
           std::make_shared<ScrollingTextRow>(
-              std::make_shared<TextRow>(std::vector<Text>{Text("Title", Color{255, 255, 255})}, CENTRE), 50,
-              displayWidth)
+              std::make_shared<TextRow>(
+                  std::vector<std::shared_ptr<RenderableText>>{std::make_shared<Text>("Title", Color{255, 255, 255})},
+                  CENTRE),
+              50, displayWidth)
 
       }),
       onTick(onTick) {}
