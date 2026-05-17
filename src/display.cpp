@@ -49,7 +49,12 @@ std::map<std::string, std::unique_ptr<Renderable>> setupRenderables(App* app) {
   auto updateMedia = [app](MediaDisplay& media) { media.setMedia(app->state.title(), app->state.artist()); };
   renderables[MEDIA_PAGE] = std::make_unique<MediaDisplay>(DISPLAY_WIDTH, updateMedia);
 
-  auto updateDepartures = [app](DeparturesBoard& board) { board.setDepartures(app->departures); };
+  auto updateDepartures = [app](DeparturesBoard& board) {
+    if (xSemaphoreTake(app->departuresMutex, pdMS_TO_TICKS(5)) == pdTRUE) {
+      board.setDepartures(app->departures);
+      xSemaphoreGive(app->departuresMutex);
+    }
+  };
   renderables[TRAINS_PAGE] = std::make_unique<DeparturesBoard>(DISPLAY_WIDTH, updateDepartures);
 
   return renderables;

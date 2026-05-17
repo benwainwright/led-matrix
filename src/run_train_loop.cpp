@@ -32,7 +32,10 @@ void runTrainLoop(void* parameter) {
       Serial.printf("Status code: %d\n", departures.error().statusCode);
       Serial.printf("Body: %s\n", departures.error().responseBody.c_str());
     } else {
-      app->departures = departures.value();
+      if (xSemaphoreTake(app->departuresMutex, portMAX_DELAY) == pdTRUE) {
+        app->departures = departures.value();
+        xSemaphoreGive(app->departuresMutex);
+      }
     }
 
     vTaskDelay(TRAIN_REFRESH_INTERVAL);

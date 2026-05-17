@@ -2,8 +2,9 @@
 #include "calculator.h"
 
 Page::Page(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::unique_ptr<Renderable> rows, const GFXfont* defaultFont,
-           size_t gap)
-    : pageDirty(true), rows(std::move(rows)), display(display), gap(gap), defaultFont(defaultFont) {}
+           size_t gap, bool verticallyAlignRows)
+    : pageDirty(true), rows(std::move(rows)), display(display), gap(gap), defaultFont(defaultFont),
+      verticallyAlignRows(verticallyAlignRows) {}
 
 void Page::setDirty() {
   auto text = rows->getText();
@@ -63,7 +64,8 @@ int16_t Page::getWidthOffsetForCentre(int16_t x, int16_t y, const char* message)
   return ((display->width() - w) / 2) - x1;
 }
 
-int16_t Page::getHeightOffsetForCentre(int16_t x, int16_t y, const char* message, uint8_t index, uint8_t count) {
+int16_t Page::getHeightOffsetForCentre(int16_t x, int16_t y, const char* message, uint8_t index, uint8_t count,
+                                       const GFXfont* font, size_t fontSize) {
   if (display == nullptr) {
     return 0;
   }
@@ -75,10 +77,13 @@ int16_t Page::getHeightOffsetForCentre(int16_t x, int16_t y, const char* message
 
   display->getTextBounds(message, 0, 0, &x1, &y1, &w, &h);
 
-  int totalHeight = (h * count) + (gap * (count - 1));
-  int startY = (display->height() - totalHeight) / 2;
+  int lineHeight = font->yAdvance * fontSize;
+  int gapHeight = gap * fontSize;
+  int totalHeight = (lineHeight * count) + ((count - 1) * gapHeight);
 
-  return startY + (index * (h + gap)) - y1;
+  int startY = ((display->height() - totalHeight) / 2) - (y1 - gapHeight);
+
+  return startY + (index * (lineHeight + gapHeight));
 }
 
 int16_t Page::getWidthOfTextItem(const Text& text, int16_t x, int16_t y) {
@@ -135,17 +140,20 @@ void Page::renderText(Text& textItem, int size) {
 
 void Page::updateRow(RenderableText& row, uint8_t index) {
   auto text = rows->getText();
+  display->setTextSize(row.fontSize());
   for (size_t i = 0; i < row.size(); i++) {
     row[i].setDefaultFont(defaultFont);
   }
   row.tick(display.get());
 
-  display->setTextSize(row.fontSize());
   if (row.alignment() == CENTRE) {
     auto raw = row.rowString();
-    auto widthOffset = getWidthOffsetForCentre(row.x(), row.y(), raw.c_str());
-    auto heightOffset = getHeightOffsetForCentre(row.x(), row.y(), raw.c_str(), index, text.size());
-    row.setX(widthOffset);
+    if (row.alignment() == CENTRE) {
+      auto widthOffset = getWidthOffsetForCentre(row.x(), row.y(), raw.c_str());
+      row.setX(widthOffset);
+    }
+    auto heightOffset =
+        getHeightOffsetForCentre(row.x(), row.y(), raw.c_str(), index, text.size(), defaultFont, row.fontSize());
     row.setY(heightOffset);
   }
   this->positionRowContents(row, defaultFont);

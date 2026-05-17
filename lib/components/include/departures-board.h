@@ -18,7 +18,8 @@ public:
   DeparturesBoard(size_t displayWidth, std::function<void(DeparturesBoard&)> onTick);
 
   void tick() override;
-  void setDepartures(std::vector<Departure> departures);
+  int gap() { return 0; }
+  void setDepartures(const std::vector<Departure>& departures);
   std::vector<std::shared_ptr<RenderableText>> getText() override;
 };
 

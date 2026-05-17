@@ -7,7 +7,7 @@ DeparturesBoard::DeparturesBoard(size_t displayWidth, std::function<void(Departu
                                      DepartureRow(displayWidth), DepartureRow(displayWidth)}),
       onTick(onTick) {};
 
-void DeparturesBoard::setDepartures(std::vector<Departure> departures) {
+void DeparturesBoard::setDepartures(const std::vector<Departure>& departures) {
   if (departures.size() < 4) {
     return;
   }

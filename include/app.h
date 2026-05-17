@@ -8,6 +8,7 @@
 #include <PubSubClient.h>
 #include <WiFi.h>
 #include <rtt.h>
+#include <freertos/semphr.h>
 #include <string>
 
 struct App {
@@ -16,13 +17,14 @@ struct App {
   ConfigServer config;
   DNSServer dns;
   std::vector<Departure> departures;
+  SemaphoreHandle_t departuresMutex;
   bool accessPointModeOn;
   std::shared_ptr<MatrixPanel_I2S_DMA> display;
   EventGroupHandle_t finishedDataInitialisationEventGroup;
   State state;
   App()
-      : wifi(), mqtt(wifi), accessPointModeOn(false), display(nullptr), finishedDataInitialisationEventGroup(nullptr),
-        state(&mqtt) {}
+      : wifi(), mqtt(wifi), departuresMutex(nullptr), accessPointModeOn(false), display(nullptr),
+        finishedDataInitialisationEventGroup(nullptr), state(&mqtt) {}
 };
 
 #define DATA_READY_BIT BIT0

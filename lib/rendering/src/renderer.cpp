@@ -7,7 +7,9 @@ Renderer::Renderer(std::shared_ptr<MatrixPanel_I2S_DMA> display,
                    const GFXfont* defaultFont)
     : page(initialPage), defaultFont(defaultFont) {
   for (auto& renderable : renderables) {
-    pages.emplace(renderable.first, Page(display, std::move(renderable.second), defaultFont));
+    auto gap = renderable.second->gap();
+    auto verticallyAlign = renderable.second->verticallyAlign();
+    pages.emplace(renderable.first, Page(display, std::move(renderable.second), defaultFont, gap, verticallyAlign));
   }
 }
 

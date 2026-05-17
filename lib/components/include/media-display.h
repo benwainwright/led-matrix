@@ -17,6 +17,7 @@ public:
   void setMedia(const String& title, const String& artist);
   void setPlaying(bool playing);
   void tick() override;
+  bool verticallyAlign() { return false; }
 
   std::vector<std::shared_ptr<RenderableText>> getText() override;
 };

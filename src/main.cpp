@@ -16,6 +16,12 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
 
   app.finishedDataInitialisationEventGroup = xEventGroupCreate();
+  app.departuresMutex = xSemaphoreCreateMutex();
+
+  if (app.departuresMutex == nullptr) {
+    Serial.println("Failed to create departures mutex");
+    return;
+  }
 
   if (xTaskCreatePinnedToCore(displayLoop, "Display Loop", 4096, &app, 3, nullptr, 0) != pdPASS) {
     Serial.println("Failed to create display task");
