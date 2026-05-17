@@ -1,5 +1,6 @@
 #ifndef TEXT_ROW_H
 #define TEXT_ROW_H
+#include "alignment.h"
 #include "renderable-text.h"
 #include "text.h"
 #include <Arduino.h>
@@ -8,20 +9,23 @@
 class TextRow : public RenderableText {
 private:
   std::vector<Text> row;
+  Alignment alignmentValue;
   size_t fontSizeValue;
   int16_t xValue;
   int16_t yValue;
-  int16_t getRenderedWidth(MatrixPanel_I2S_DMA* display);
 
 public:
-  TextRow(std::vector<Text> row);
-  TextRow(std::vector<Text> row, size_t fontSize);
+  TextRow(std::vector<Text> row, Alignment alignment = LEFT, size_t fontSize = 1);
   int16_t x();
+  Alignment alignment();
   int16_t y();
   void setX(int16_t x);
   void setY(int16_t y);
   size_t size();
   size_t fontSize();
+  void tick();
+  int totalWidth();
+  void dirtyRow();
   bool isDirty() const;
   String rowString() const;
   Text& operator[](size_t index);

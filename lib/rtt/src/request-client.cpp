@@ -29,7 +29,11 @@ RequestClient::RequestClient(const std::string& baseUrl, const std::string& refr
 tl::expected<JsonDocument, ErrorResponse>
 RequestClient::get(const std::string& path, std::map<std::string, std::string> args) {
   auto accessToken = token.value();
-  return request(path, GET, accessToken, args);
+  if (!accessToken.has_value()) {
+    return tl::unexpected(accessToken.error());
+  }
+
+  return request(path, GET, accessToken.value(), args);
 }
 
 std::string RequestClient::buildUrl(const std::string& path,
@@ -103,5 +107,6 @@ RequestClient::request(const std::string& path, HttpMethod method, const std::st
     client.end();
     return document;
   }
+  client.end();
   return tl::unexpected(ErrorResponse{responseCode, std::string(response.c_str())});
 }

@@ -3,38 +3,39 @@
 #include <Arduino.h>
 
 Renderer::Renderer(std::shared_ptr<MatrixPanel_I2S_DMA> display,
-                   std::map<std::string, std::unique_ptr<Renderable>> renderables,
-                   std::string initialPage)
-    : page(initialPage) {
+                   std::map<std::string, std::unique_ptr<Renderable>> renderables, std::string initialPage,
+                   const GFXfont* defaultFont)
+    : page(initialPage), defaultFont(defaultFont) {
   for (auto& renderable : renderables) {
-    pages.emplace(renderable.first, Page(display, std::move(renderable.second)));
+    pages.emplace(renderable.first, Page(display, std::move(renderable.second), defaultFont));
   }
 }
 
 void Renderer::render(std::string page) {
-  tick();
-  showPage(page);
-  pages.at(page).render();
+  this->tick();
+  this->showPage(page);
+  this->pages.at(page).render();
 }
 
 void Renderer::tick() {
-  for (auto& renderable : pages) {
+  for (auto& renderable : this->pages) {
     renderable.second.tick();
   }
 }
 
 void Renderer::init() {
-  for (auto& renderable : pages) {
+  for (auto& renderable : this->pages) {
     renderable.second.init();
   }
 }
 
 void Renderer::showPage(std::string page) {
-  if (!(pages.find(page) != pages.end())) {
+  if (!(this->pages.find(page) != this->pages.end())) {
     return;
   }
   if (page != this->page) {
-    pages.at(page).setDirty();
+    this->pages.at(page).clear();
+    this->pages.at(page).setDirty();
+    this->page = page;
   }
-  this->page = page;
 }

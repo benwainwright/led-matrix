@@ -64,7 +64,7 @@ void displayLoop(void* parameter)
   xEventGroupWaitBits(app->finishedDataInitialisationEventGroup, DATA_READY_BIT, pdFALSE, pdFALSE, portMAX_DELAY);
 
   auto renderables = setupRenderables(app);
-  auto renderer = Renderer(app->display, std::move(renderables), CLOCK_PAGE);
+  auto renderer = Renderer(app->display, std::move(renderables), CLOCK_PAGE, &andala4pt7b);
 
   renderer.init();
 

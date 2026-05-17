@@ -5,10 +5,11 @@
 
 DepartureRow::DepartureRow(size_t displayWidth)
     : text(std::make_shared<ScrollingTextRow>(
-          std::make_shared<TextRow>(std::vector<Text>{
-              Text("00:00", Color{168, 130, 221}), Text(" ", Color{255, 255, 255}),
-              Text("Station", Color{224, 141, 121}), Text(" ", Color{255, 255, 255}),
-              Text("14", Color{179, 242, 221})}),
+          std::make_shared<TextRow>(
+              std::vector<Text>{Text("00:00", Color{168, 130, 221}), Text(" ", Color{255, 255, 255}),
+                                Text("Station", Color{224, 141, 121}), Text(" ", Color{255, 255, 255}),
+                                Text("14", Color{179, 242, 221})},
+              CENTRE),
           50, displayWidth)) {}
 
 String DepartureRow::withLeadingZeros(int number) const {

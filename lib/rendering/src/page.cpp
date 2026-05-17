@@ -1,15 +1,22 @@
 #include "page.h"
+#include "calculator.h"
 
-Page::Page(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::unique_ptr<Renderable> rows)
-    : Page::Page(display, std::move(rows), 1) {}
+Page::Page(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::unique_ptr<Renderable> rows, const GFXfont* defaultFont,
+           size_t gap)
+    : pageDirty(true), rows(std::move(rows)), display(display), gap(gap), defaultFont(defaultFont) {}
 
-Page::Page(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::unique_ptr<Renderable> rows, size_t gap)
-    : pageDirty(true), rows(std::move(rows)), display(display), gap(gap) {}
-
-void Page::setDirty() { pageDirty = true; }
+void Page::setDirty() {
+  auto text = rows->getText();
+  for (size_t i = 0; i < text.size(); i++) {
+    text[i]->dirtyRow();
+  }
+}
 
 void Page::tick() { rows->tick(); }
+
 void Page::init() { rows->init(); }
+
+void Page::clear() { display->clearScreen(); }
 
 bool Page::isDirty() {
   if (pageDirty) {
@@ -28,21 +35,21 @@ bool Page::isDirty() {
 }
 
 void Page::render() {
+  display->setTextWrap(false);
   auto text = rows->getText();
   for (size_t i = 0; i < text.size(); i++) {
     text[i]->tick(display.get());
   }
   if (isDirty()) {
-    display->clearScreen();
     for (size_t i = 0; i < text.size(); i++) {
-      positionRow(*text[i], i);
+      updateRow(*text[i], i);
       renderRow(*text[i], i);
     }
   }
   pageDirty = false;
 }
 
-int16_t Page::getWidthOffsetForCentre(const char* message) {
+int16_t Page::getWidthOffsetForCentre(int16_t x, int16_t y, const char* message) {
   if (display == nullptr) {
     return 0;
   }
@@ -56,7 +63,7 @@ int16_t Page::getWidthOffsetForCentre(const char* message) {
   return ((display->width() - w) / 2) - x1;
 }
 
-int16_t Page::getHeightOffsetForCentre(const char* message, uint8_t index, uint8_t count) {
+int16_t Page::getHeightOffsetForCentre(int16_t x, int16_t y, const char* message, uint8_t index, uint8_t count) {
   if (display == nullptr) {
     return 0;
   }
@@ -67,10 +74,11 @@ int16_t Page::getHeightOffsetForCentre(const char* message, uint8_t index, uint8
   uint16_t h;
 
   display->getTextBounds(message, 0, 0, &x1, &y1, &w, &h);
-  float centreY = (display->height() - (h + gap)) / 2.0f - y1;
-  float rowOffset = (index - ((count - 1) / 2.0f)) * (h + gap);
 
-  return centreY + rowOffset;
+  int totalHeight = (h * count) + (gap * (count - 1));
+  int startY = (display->height() - totalHeight) / 2;
+
+  return startY + (index * (h + gap)) - y1;
 }
 
 int16_t Page::getWidthOfTextItem(const Text& text, int16_t x, int16_t y) {
@@ -89,29 +97,66 @@ int16_t Page::getWidthOfTextItem(const Text& text, int16_t x, int16_t y) {
   return w;
 }
 
-void Page::positionRow(RenderableText& row, uint8_t index) {
-  auto text = rows->getText();
-  auto raw = row.rowString();
-  display->setTextSize(row.fontSize());
-  display->setTextWrap(false);
-  auto widthOffset = getWidthOffsetForCentre(raw.c_str());
-  auto heightOffset = getHeightOffsetForCentre(raw.c_str(), index, text.size());
+void Page::positionRowContents(RenderableText& row, const GFXfont* defaultFont) {
+  auto xPosition = row.x();
+  for (int i = 0; i < row.size(); i++) {
+    {
 
-  row.setX(widthOffset);
-  row.setY(heightOffset);
+      int16_t x1;
+      int16_t y1;
+      uint16_t w;
+      uint16_t h;
+
+      Text& textItem = row[i];
+      display->getTextBounds(textItem.content().c_str(), xPosition, row.y(), &x1, &y1, &w, &h);
+      textItem.setPosition(Coordinates{x1, y1, h, w, xPosition, row.y()});
+
+      xPosition += calculateWidth(textItem.content().c_str(), textItem.font(), row.fontSize());
+    }
+  }
+}
+
+void Page::clearText(Text& textItem, int size) {
+  display->setTextSize(size);
+  display->fillRect(textItem.oldPosition().x, textItem.oldPosition().y, textItem.oldPosition().width,
+                    textItem.oldPosition().height, 0);
+}
+
+void Page::renderText(Text& textItem, int size) {
+  if (!textItem.isDirty()) {
+    return;
+  }
+  this->clearText(textItem, size);
+  display->setCursor(textItem.position().cursorX, textItem.position().cursorY);
+  display->setTextColor(display->color565(textItem.color().red, textItem.color().green, textItem.color().blue));
+  display->print(textItem.content());
+  textItem.markRendered();
+}
+
+void Page::updateRow(RenderableText& row, uint8_t index) {
+  auto text = rows->getText();
+  for (size_t i = 0; i < row.size(); i++) {
+    row[i].setDefaultFont(defaultFont);
+  }
+  row.tick(display.get());
+
+  display->setTextSize(row.fontSize());
+  if (row.alignment() == CENTRE) {
+    auto raw = row.rowString();
+    auto widthOffset = getWidthOffsetForCentre(row.x(), row.y(), raw.c_str());
+    auto heightOffset = getHeightOffsetForCentre(row.x(), row.y(), raw.c_str(), index, text.size());
+    row.setX(widthOffset);
+    row.setY(heightOffset);
+  }
+  this->positionRowContents(row, defaultFont);
 }
 
 void Page::renderRow(RenderableText& row, uint8_t index) {
-  display->setCursor(row.x(), row.y());
 
   for (size_t i = 0; i < row.size(); i++) {
-
-    display->setTextColor(display->color565(row[i].color().red, row[i].color().green, row[i].color().blue));
-
-    display->print(row[i].content());
-
-    row[i].markRendered();
+    if (row[i].isDirty()) {
+      this->renderText(row[i], row.fontSize());
+    }
   }
-
   row.markRendered();
 }

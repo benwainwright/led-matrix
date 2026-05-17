@@ -21,8 +21,8 @@ struct App {
   EventGroupHandle_t finishedDataInitialisationEventGroup;
   State state;
   App()
-      : wifi(), mqtt(wifi), accessPointModeOn(false), display(nullptr),
-        finishedDataInitialisationEventGroup(nullptr), state(&mqtt) {}
+      : wifi(), mqtt(wifi), accessPointModeOn(false), display(nullptr), finishedDataInitialisationEventGroup(nullptr),
+        state(&mqtt) {}
 };
 
 #define DATA_READY_BIT BIT0

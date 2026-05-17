@@ -1,25 +1,20 @@
 #include "text-row.h"
+#include "calculator.h"
+#include "pgm-read-glyph-ptr.h"
+#include <Adafruit_GFX.h>
+#include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 
-TextRow::TextRow(std::vector<Text> row) : TextRow(row, 1) {}
-TextRow::TextRow(std::vector<Text> row, size_t fontSize)
-    : row(row), fontSizeValue(fontSize), xValue(0), yValue(0) {}
+TextRow::TextRow(std::vector<Text> row, Alignment alignment, size_t fontSize)
+    : row(row), alignmentValue(alignment), fontSizeValue(fontSize), xValue(0), yValue(0) {}
 
 size_t TextRow::size() { return row.size(); }
 
-int16_t TextRow::getRenderedWidth(MatrixPanel_I2S_DMA* display) {
+Alignment TextRow::alignment() { return this->alignmentValue; }
 
-  if (display == nullptr) {
-    return 0;
+void TextRow::dirtyRow() {
+  for (size_t i = 0; i < row.size(); i++) {
+    row[i].setDirty();
   }
-
-  int16_t x1;
-  int16_t y1;
-  uint16_t w;
-  uint16_t h;
-
-  String content = rowString();
-  display->getTextBounds(content.c_str(), xValue, yValue, &x1, &y1, &w, &h);
-  return w;
 }
 
 bool TextRow::isDirty() const {
@@ -32,10 +27,18 @@ bool TextRow::isDirty() const {
 }
 
 void TextRow::setX(int16_t x) { xValue = x; }
-
 void TextRow::setY(int16_t y) { yValue = y; }
 
 int16_t TextRow::x() { return xValue; }
+
+int TextRow::totalWidth() {
+  int width = 0;
+  for (int i = 0; i < row.size(); i++) {
+    width += calculateWidth(row[i].content().c_str(), row[i].font(), fontSizeValue);
+  }
+
+  return width;
+}
 
 int16_t TextRow::y() { return yValue; }
 

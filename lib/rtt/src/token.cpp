@@ -19,13 +19,21 @@ bool Token::hasExpired() {
   return expiresAt < time;
 }
 
-const std::string& Token::value() {
+tl::expected<std::string, ErrorResponse> Token::value() {
   if (!accessToken.has_value() || hasExpired()) {
     auto newToken = refresh(*this);
-    if (newToken.has_value()) {
-      accessToken = newToken->accessToken;
-      expiresAt = newToken->validUntil;
+    if (!newToken.has_value()) {
+      accessToken.reset();
+      expiresAt.reset();
+      return tl::unexpected(newToken.error());
     }
+
+    accessToken = newToken->accessToken;
+    expiresAt = newToken->validUntil;
+  }
+
+  if (!accessToken.has_value()) {
+    return tl::unexpected(ErrorResponse{401, "Failed to acquire access token"});
   }
 
   return accessToken.value();

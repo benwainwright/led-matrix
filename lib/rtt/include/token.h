@@ -19,7 +19,7 @@ public:
   Token(const std::string& refreshToken,
         std::function<tl::expected<RefreshResponse, ErrorResponse>(Token&)> refreshCallback);
 
-  const std::string& value();
+  tl::expected<std::string, ErrorResponse> value();
 };
 
 #endif
