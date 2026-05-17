@@ -2,7 +2,6 @@
 #include "calculator.h"
 #include "pgm-read-glyph-ptr.h"
 #include <Adafruit_GFX.h>
-#include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 
 TextRow::TextRow(std::vector<std::shared_ptr<RenderableText>> row, Alignment alignment, size_t fontSize)
     : row(row), alignmentValue(alignment), fontSizeValue(fontSize), xValue(0), yValue(0) {}
@@ -10,6 +9,12 @@ TextRow::TextRow(std::vector<std::shared_ptr<RenderableText>> row, Alignment ali
 size_t TextRow::size() { return row.size(); }
 
 Alignment TextRow::alignment() { return this->alignmentValue; }
+
+void TextRow::setDefaultFont(const GFXfont* font) {
+  for (size_t i = 0; i < row.size(); i++) {
+    row[i]->setDefaultFont(font);
+  }
+}
 
 void TextRow::dirtyRow() {
   for (size_t i = 0; i < row.size(); i++) {
@@ -34,7 +39,7 @@ int16_t TextRow::x() { return xValue; }
 int TextRow::totalWidth() {
   int width = 0;
   for (int i = 0; i < row.size(); i++) {
-    width += calculateWidth(row[i]->content().c_str(), row[i]->font(), fontSizeValue);
+    width += row[i]->position().width;
   }
 
   return width;
@@ -54,9 +59,9 @@ String TextRow::rowString() const {
   return buffer;
 }
 
-void TextRow::tick(MatrixPanel_I2S_DMA* display) {
+void TextRow::tick(MaskedDisplay* display) {
   for (size_t i = 0; i < row.size(); i++) {
-    row[i]->tick();
+    row[i]->tick(display);
   }
 }
 

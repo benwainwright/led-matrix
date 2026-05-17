@@ -1,7 +1,7 @@
 #include "page.h"
 #include "calculator.h"
 
-Page::Page(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::unique_ptr<Renderable> rows, const GFXfont* defaultFont,
+Page::Page(std::shared_ptr<MaskedDisplay> display, std::unique_ptr<Renderable> rows, const GFXfont* defaultFont,
            size_t gap, bool verticallyAlignRows)
     : pageDirty(true), rows(std::move(rows)), display(display), gap(gap), defaultFont(defaultFont),
       verticallyAlignRows(verticallyAlignRows) {}
@@ -15,7 +15,14 @@ void Page::setDirty() {
 
 void Page::tick() { rows->tick(); }
 
-void Page::init() { rows->init(); }
+void Page::init() {
+  rows->init();
+  auto text = rows->getText();
+
+  for (size_t i = 0; i < text.size(); i++) {
+    text[i]->setDefaultFont(defaultFont);
+  }
+}
 
 void Page::clear() { display->clearScreen(); }
 
@@ -135,6 +142,7 @@ void Page::renderText(RenderableText& textItem, int size) {
   display->setCursor(textItem.position().cursorX, textItem.position().cursorY);
   display->setTextColor(display->color565(textItem.color().red, textItem.color().green, textItem.color().blue));
   display->print(textItem.content());
+  display->clearMask();
   textItem.markRendered();
 }
 
@@ -146,16 +154,14 @@ void Page::updateRow(RenderableTextRow& row, uint8_t index) {
   }
   row.tick(display.get());
 
+  auto raw = row.rowString();
   if (row.alignment() == CENTRE) {
-    auto raw = row.rowString();
-    if (row.alignment() == CENTRE) {
-      auto widthOffset = getWidthOffsetForCentre(row.x(), row.y(), raw.c_str());
-      row.setX(widthOffset);
-    }
-    auto heightOffset =
-        getHeightOffsetForCentre(row.x(), row.y(), raw.c_str(), index, text.size(), defaultFont, row.fontSize());
-    row.setY(heightOffset);
+    auto widthOffset = getWidthOffsetForCentre(row.x(), row.y(), raw.c_str());
+    row.setX(widthOffset);
   }
+  auto heightOffset =
+      getHeightOffsetForCentre(row.x(), row.y(), raw.c_str(), index, text.size(), defaultFont, row.fontSize());
+  row.setY(heightOffset);
   this->positionRowContents(row, defaultFont);
 }
 

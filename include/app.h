@@ -6,9 +6,10 @@
 #include <DNSServer.h>
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 #include <PubSubClient.h>
+#include <Rendering.h>
 #include <WiFi.h>
-#include <rtt.h>
 #include <freertos/semphr.h>
+#include <rtt.h>
 #include <string>
 
 struct App {
@@ -19,7 +20,7 @@ struct App {
   std::vector<Departure> departures;
   SemaphoreHandle_t departuresMutex;
   bool accessPointModeOn;
-  std::shared_ptr<MatrixPanel_I2S_DMA> display;
+  std::shared_ptr<MaskedDisplay> display;
   EventGroupHandle_t finishedDataInitialisationEventGroup;
   State state;
   App()

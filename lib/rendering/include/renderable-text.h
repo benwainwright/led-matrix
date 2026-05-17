@@ -5,6 +5,7 @@
 #include "alignment.h"
 #include "color.h"
 #include "coordinates.h"
+#include "masked-display.h"
 #include <Adafruit_GFX.h>
 #include <Arduino.h>
 #include <memory>
@@ -25,7 +26,7 @@ public:
   virtual Color color() const { return this->parent->color(); };
   virtual void setDefaultFont(const GFXfont* font) { this->parent->setDefaultFont(font); };
   virtual void setDirty() { this->parent->setDirty(); };
-  virtual void tick() {};
+  virtual void tick(MaskedDisplay* display) {};
   virtual Coordinates oldPosition() { return this->parent->oldPosition(); }
   virtual Coordinates position() { return this->parent->position(); };
   virtual void setPosition(Coordinates coords) { this->parent->setPosition(coords); };

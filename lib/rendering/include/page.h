@@ -1,18 +1,18 @@
 #ifndef PAGE_H
 #define PAGE_H
 
+#include "masked-display.h"
 #include "renderable-text-row.h"
 #include "renderable.h"
 #include "text-row.h"
 #include <Adafruit_GFX.h>
 #include <Arduino.h>
-#include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 
 class Page {
 private:
   bool pageDirty;
   std::unique_ptr<Renderable> rows;
-  std::shared_ptr<MatrixPanel_I2S_DMA> display;
+  std::shared_ptr<MaskedDisplay> display;
   size_t gap;
   const GFXfont* defaultFont;
   bool verticallyAlignRows;
@@ -29,7 +29,7 @@ private:
   bool isDirty();
 
 public:
-  Page(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::unique_ptr<Renderable> rows, const GFXfont* defaultFont,
+  Page(std::shared_ptr<MaskedDisplay> display, std::unique_ptr<Renderable> rows, const GFXfont* defaultFont,
        size_t gap = 1, bool verticallyAlignRows = true);
   void setRow(uint8_t rowNumber, std::vector<Text> row);
   void render();

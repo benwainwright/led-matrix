@@ -1,41 +1,57 @@
 #include "scrolling-text.h"
 #include "calculator.h"
 
-ScrollingText::ScrollingText(int scrollSpeed, int width)
-    : scrollSpeed(scrollSpeed), width(width), scrollPosition(0), nextFrame(millis()),
-      oldPositionValue(Coordinates{0, 0, 0, 0, 0, 0}) {}
+ScrollingText::ScrollingText(std::shared_ptr<RenderableText> parent, int scrollSpeed, int width)
+    : RenderableText(parent), scrollSpeed(scrollSpeed), widthValue(width), scrollPosition(0), nextFrame(millis()),
+      oldPositionValue(Coordinates{0, 0, 0, 0, 0, 0}), scrollPositionInitialized(false) {}
 
-void ScrollingText::tick() {
+void ScrollingText::tick(MaskedDisplay* display) {
   auto now = millis();
-  auto contentWidth = calculateWidth(parent->content().c_str(), parent->font(), parent->getFontSize());
+  auto parentPosition = parent->position();
+  auto contentWidth = parentPosition.width;
+  auto viewportX = parentPosition.cursorX;
 
   if ((now - nextFrame) >= scrollSpeed) {
-    if (contentWidth > width) {
+    if (contentWidth > widthValue) {
+      display->setMask(parentPosition.cursorX, parentPosition.cursorY, widthValue, parentPosition.height);
+      if (!scrollPositionInitialized) {
+        scrollPosition = viewportX;
+        scrollPositionInitialized = true;
+      }
       if (now > nextFrame) {
         nextFrame += scrollSpeed;
-        if (scrollPosition > -contentWidth) {
+        if (scrollPosition > viewportX - contentWidth) {
           scrollPosition -= 1;
         } else {
-          scrollPosition = width;
+          scrollPosition = viewportX + widthValue;
         }
         setDirty();
       }
     } else {
-      scrollPosition = parent->position().cursorX;
+      scrollPosition = viewportX;
+      scrollPositionInitialized = true;
     }
-    parent->tick();
+    parent->tick(display);
   }
 }
 
 Coordinates ScrollingText::position() {
   auto position = parent->position();
-  auto contentWidth = calculateWidth(parent->content().c_str(), parent->font(), parent->getFontSize());
-  position.x = contentWidth > width ? scrollPosition : position.x;
-  oldPositionValue = position;
+  auto contentWidth = position.width;
+  position.cursorX = contentWidth > widthValue ? scrollPosition : position.cursorX;
+  position.width = widthValue;
   return position;
 }
 
 Coordinates ScrollingText::oldPosition() { return oldPositionValue; }
+
+void ScrollingText::setPosition(Coordinates coords) {
+  parent->setPosition(coords);
+  if (!scrollPositionInitialized || coords.width <= widthValue) {
+    scrollPosition = coords.cursorX;
+    scrollPositionInitialized = true;
+  }
+}
 
 void ScrollingText::markRendered() {
   this->oldPositionValue = this->position();

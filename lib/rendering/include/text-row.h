@@ -1,6 +1,7 @@
 #ifndef TEXT_ROW_H
 #define TEXT_ROW_H
 #include "alignment.h"
+#include "masked-display.h"
 #include "renderable-text-row.h"
 #include "renderable-text.h"
 #include "text.h"
@@ -19,12 +20,13 @@ public:
   TextRow(std::vector<std::shared_ptr<RenderableText>> row, Alignment alignment = LEFT, size_t fontSize = 1);
   int16_t x();
   Alignment alignment();
+  void setDefaultFont(const GFXfont* font);
   int16_t y();
   void setX(int16_t x);
   void setY(int16_t y);
   size_t size();
   size_t fontSize();
-  void tick(MatrixPanel_I2S_DMA* display) override;
+  void tick(MaskedDisplay* display) override;
   int totalWidth();
   void dirtyRow();
   bool isDirty() const;

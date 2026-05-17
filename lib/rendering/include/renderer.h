@@ -3,6 +3,7 @@
 
 #include "page.h"
 #include "renderable.h"
+#include "masked-display.h"
 #include <Adafruit_GFX.h>
 #include <Arduino.h>
 #include <map>
@@ -17,7 +18,7 @@ private:
   void tick();
 
 public:
-  Renderer(std::shared_ptr<MatrixPanel_I2S_DMA> display, std::map<std::string, std::unique_ptr<Renderable>> pages,
+  Renderer(std::shared_ptr<MaskedDisplay> display, std::map<std::string, std::unique_ptr<Renderable>> pages,
            std::string initialPage, const GFXfont* defaultFont);
   void render(std::string page);
   void init();

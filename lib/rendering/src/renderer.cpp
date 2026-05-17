@@ -2,7 +2,7 @@
 #include "page.h"
 #include <Arduino.h>
 
-Renderer::Renderer(std::shared_ptr<MatrixPanel_I2S_DMA> display,
+Renderer::Renderer(std::shared_ptr<MaskedDisplay> display,
                    std::map<std::string, std::unique_ptr<Renderable>> renderables, std::string initialPage,
                    const GFXfont* defaultFont)
     : page(initialPage), defaultFont(defaultFont) {

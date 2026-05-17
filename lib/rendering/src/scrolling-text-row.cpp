@@ -11,11 +11,13 @@ size_t ScrollingTextRow::size() { return parent->size(); }
 
 Alignment ScrollingTextRow::alignment() { return parent->alignment(); }
 
+void ScrollingTextRow::setDefaultFont(const GFXfont* font) { parent->setDefaultFont(font); }
+
 bool ScrollingTextRow::isDirty() const { return dirtyFromScroll || parent->isDirty(); }
 
 void ScrollingTextRow::setX(int16_t x) { parent->setX(x); }
 
-void ScrollingTextRow::tick(MatrixPanel_I2S_DMA* display) {
+void ScrollingTextRow::tick(MaskedDisplay* display) {
   auto now = millis();
   auto renderedWidth = getRenderedWidth(*display, rowString().c_str(), parent->x(), parent->y());
 
@@ -33,7 +35,6 @@ void ScrollingTextRow::tick(MatrixPanel_I2S_DMA* display) {
     scrollPosition = parent->x();
   }
 
-  Serial.printf("scrollpos: %d\n", scrollPosition);
   parent->tick(display);
 }
 

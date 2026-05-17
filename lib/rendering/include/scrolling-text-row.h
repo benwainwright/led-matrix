@@ -2,6 +2,7 @@
 #define SCROLLING_TEXT_ROW_H
 
 #include "alignment.h"
+#include "masked-display.h"
 #include "renderable-text-row.h"
 #include "renderable-text.h"
 #include "text.h"
@@ -20,8 +21,9 @@ private:
 
 public:
   ScrollingTextRow(std::shared_ptr<RenderableTextRow> row, size_t scrollInterval, int16_t maxWidth);
-  void tick(MatrixPanel_I2S_DMA* display) override;
+  void tick(MaskedDisplay* display) override;
   RenderableText& operator[](size_t index);
+  void setDefaultFont(const GFXfont* font);
   void dirtyRow();
   size_t fontSize();
   int16_t x();

@@ -1,6 +1,7 @@
 #ifndef BLINKING_TEXT_H
 #define BLINKING_TEXT_H
 
+#include "masked-display.h"
 #include "renderable-text.h"
 
 class BlinkingText : public RenderableText {
@@ -13,7 +14,7 @@ private:
   bool blinkOn;
 
 public:
-  void tick() override;
+  void tick(MaskedDisplay* display) override;
   Color color() const override;
   BlinkingText(std::shared_ptr<RenderableText> parent, Color blinkColor, int blinkDuration, int blinkSpacing);
 };

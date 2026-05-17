@@ -1,11 +1,12 @@
 #include "text.h"
+#include "calculator.h"
 #include "coordinates.h"
 #include <Arduino.h>
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 
 Text::Text(const String& content, Color color, const GFXfont* font, int fontSize)
     : oldPositionValue(Coordinates{0, 0, 0, 0, 0, 0}), positionValue(Coordinates{0, 0, 0, 0, 0, 0}), fontValue(font),
-      contentValue(content), colorValue(color), dirty(true), fontSizeValue(fontSize) {}
+      defaultFont(nullptr), contentValue(content), colorValue(color), dirty(true), fontSizeValue(fontSize) {}
 
 void Text::setColor(Color color) {
   if (color.red != colorValue.red || color.green != colorValue.green || color.blue != colorValue.blue) {

@@ -1,4 +1,5 @@
 #include "calculator.h"
+#include "masked-display.h"
 #include "pgm-read-glyph-ptr.h"
 
 int calculateWidth(const char* string, const GFXfont* font, int fontSize) {
@@ -12,7 +13,7 @@ int calculateWidth(const char* string, const GFXfont* font, int fontSize) {
   return advance;
 }
 
-int16_t getRenderedWidth(MatrixPanel_I2S_DMA& display, std::string content, int x, int y) {
+int16_t getRenderedWidth(MaskedDisplay& display, std::string content, int x, int y) {
 
   int16_t x1;
   int16_t y1;
@@ -23,7 +24,7 @@ int16_t getRenderedWidth(MatrixPanel_I2S_DMA& display, std::string content, int 
   return w;
 }
 
-int16_t getRenderedHeight(MatrixPanel_I2S_DMA& display, std::string content, int x, int y) {
+int16_t getRenderedHeight(MaskedDisplay& display, std::string content, int x, int y) {
 
   int16_t x1;
   int16_t y1;
@@ -34,7 +35,7 @@ int16_t getRenderedHeight(MatrixPanel_I2S_DMA& display, std::string content, int
   return h;
 }
 
-int16_t getBoundaryX(MatrixPanel_I2S_DMA& display, std::string content, int x, int y) {
+int16_t getBoundaryX(MaskedDisplay& display, std::string content, int x, int y) {
 
   int16_t x1;
   int16_t y1;
@@ -45,7 +46,7 @@ int16_t getBoundaryX(MatrixPanel_I2S_DMA& display, std::string content, int x, i
   return x1;
 }
 
-int16_t getBoundaryY(MatrixPanel_I2S_DMA& display, std::string content, int x, int y) {
+int16_t getBoundaryY(MaskedDisplay& display, std::string content, int x, int y) {
 
   int16_t x1;
   int16_t y1;

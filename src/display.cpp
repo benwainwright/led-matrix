@@ -37,7 +37,7 @@ void initDisplay(App* app) {
   mxconfig.min_refresh_rate = 120;
   mxconfig.i2sspeed = HUB75_I2S_CFG::HZ_16M;
 
-  app->display = std::make_shared<MatrixPanel_I2S_DMA>(mxconfig);
+  app->display = std::make_shared<MaskedDisplay>(mxconfig);
   app->display->begin();
   app->display->setFont(&andala4pt7b);
 }
