@@ -17,15 +17,17 @@ private:
   String contentValue;
   Color colorValue;
   bool dirty;
+  size_t fontSizeValue;
 
 public:
-  Text(const String& content, Color color, const GFXfont* font = nullptr);
+  Text(const String& content, Color color, const GFXfont* font = nullptr, int fontSize = 1);
   void setContent(const String& content) override;
   const String& content() const override;
   void setColor(Color color) override;
   Color color() const override;
   void setDefaultFont(const GFXfont* font) override;
   void setDirty() override;
+  int getFontSize() override;
   Coordinates oldPosition() override;
   Coordinates position() override;
   void setPosition(Coordinates coords) override;

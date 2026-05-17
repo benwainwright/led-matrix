@@ -4,19 +4,11 @@
 
 #include "alignment.h"
 #include "color.h"
+#include "coordinates.h"
 #include <Adafruit_GFX.h>
 #include <Arduino.h>
 #include <memory>
 #include <optional>
-
-struct Coordinates {
-  int x;
-  int y;
-  int height;
-  int width;
-  int cursorX;
-  int cursorY;
-};
 
 class RenderableText {
 
@@ -37,6 +29,7 @@ public:
   virtual Coordinates oldPosition() { return this->parent->oldPosition(); }
   virtual Coordinates position() { return this->parent->position(); };
   virtual void setPosition(Coordinates coords) { this->parent->setPosition(coords); };
+  virtual int getFontSize() { return this->parent->getFontSize(); }
   virtual const GFXfont* font() { return this->parent->font(); };
   virtual bool isDirty() const { return this->parent->isDirty(); };
   virtual void markRendered() { this->parent->markRendered(); };
