@@ -5,5 +5,5 @@ IndentWidth: 2
 Language: Cpp
 DerivePointerAlignment: false
 PointerAlignment: Left
-ColumnLimit: 100
+ColumnLimit: 120
 ---

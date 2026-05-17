@@ -49,20 +49,17 @@ void displayLoop(void* parameter)
 
   initDisplay(app);
 
-  xEventGroupWaitBits(app->finishedDataInitialisationEventGroup, DATA_READY_BIT, pdFALSE, pdFALSE,
-                      portMAX_DELAY);
+  xEventGroupWaitBits(app->finishedDataInitialisationEventGroup, DATA_READY_BIT, pdFALSE, pdFALSE, portMAX_DELAY);
 
   std::map<std::string, std::unique_ptr<Renderable>> renderables;
 
   renderables[CLOCK_PAGE] = std::make_unique<Clock>();
 
-  renderables[MEDIA_PAGE] =
-      std::make_unique<MediaDisplay>(DISPLAY_WIDTH, [app](MediaDisplay& media) {
-        media.setMedia(app->state.title(), app->state.artist());
-      });
+  auto updateMedia = [app](MediaDisplay& media) { media.setMedia(app->state.title(), app->state.artist()); };
+  renderables[MEDIA_PAGE] = std::make_unique<MediaDisplay>(DISPLAY_WIDTH, updateMedia);
 
-  renderables[TRAINS_PAGE] = std::make_unique<DeparturesBoard>(
-      DISPLAY_WIDTH, [app](DeparturesBoard& board) { board.setDepartures(app->departures); });
+  auto updateDepartures = [app](DeparturesBoard& board) { board.setDepartures(app->departures); };
+  renderables[TRAINS_PAGE] = std::make_unique<DeparturesBoard>(DISPLAY_WIDTH, updateDepartures);
 
   auto renderer = Renderer(app->display, std::move(renderables), CLOCK_PAGE);
 
