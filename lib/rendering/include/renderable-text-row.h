@@ -5,9 +5,9 @@
 #include <Arduino.h>
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 
-class RenderableText {
+class RenderableTextRow {
 public:
-  virtual ~RenderableText() = default;
+  virtual ~RenderableTextRow() = default;
   virtual Text& operator[](size_t index) = 0;
   virtual size_t fontSize() = 0;
   virtual Alignment alignment() = 0;

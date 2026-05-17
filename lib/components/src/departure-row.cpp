@@ -32,4 +32,4 @@ void DepartureRow::setContent(Departure departure) {
   std::string platformString = "Platform " + std::to_string(departure.plannedPlatform);
   (*text)[4].setContent(platformString.c_str());
 }
-std::shared_ptr<RenderableText> DepartureRow::getText() { return text; }
+std::shared_ptr<RenderableTextRow> DepartureRow::getText() { return text; }

@@ -9,7 +9,7 @@
 class MediaDisplay : public Renderable {
 private:
   bool playing;
-  std::vector<std::shared_ptr<RenderableText>> rows;
+  std::vector<std::shared_ptr<RenderableTextRow>> rows;
   std::function<void(MediaDisplay&)> onTick;
 
 public:
@@ -19,7 +19,7 @@ public:
   void tick() override;
   bool verticallyAlign() { return false; }
 
-  std::vector<std::shared_ptr<RenderableText>> getText() override;
+  std::vector<std::shared_ptr<RenderableTextRow>> getText() override;
 };
 
 #endif

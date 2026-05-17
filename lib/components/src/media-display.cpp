@@ -3,7 +3,7 @@
 
 MediaDisplay::MediaDisplay(size_t displayWidth, std::function<void(MediaDisplay&)> onTick)
     : playing(false),
-      rows(std::initializer_list<std::shared_ptr<RenderableText>>{
+      rows(std::initializer_list<std::shared_ptr<RenderableTextRow>>{
 
           std::make_shared<ScrollingTextRow>(
               std::make_shared<TextRow>(std::vector<Text>{Text("Artist", Color{150, 150, 150})}, CENTRE), 50,
@@ -29,4 +29,4 @@ void MediaDisplay::tick() {
 
 void MediaDisplay::setPlaying(bool isPlaying) { playing = isPlaying; }
 
-std::vector<std::shared_ptr<RenderableText>> MediaDisplay::getText() { return rows; }
+std::vector<std::shared_ptr<RenderableTextRow>> MediaDisplay::getText() { return rows; }

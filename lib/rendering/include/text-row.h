@@ -1,12 +1,12 @@
 #ifndef TEXT_ROW_H
 #define TEXT_ROW_H
 #include "alignment.h"
-#include "renderable-text.h"
+#include "renderable-text-row.h"
 #include "text.h"
 #include <Arduino.h>
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 
-class TextRow : public RenderableText {
+class TextRow : public RenderableTextRow {
 private:
   std::vector<Text> row;
   Alignment alignmentValue;

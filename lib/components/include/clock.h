@@ -16,14 +16,14 @@ class Clock : public Renderable {
 
 private:
   String withLeadingZeros(int number) const;
-  std::vector<std::shared_ptr<RenderableText>> row;
+  std::vector<std::shared_ptr<RenderableTextRow>> row;
 
 public:
   Clock();
   void tick() override;
   void init() override;
   Text& operator[](size_t index);
-  std::vector<std::shared_ptr<RenderableText>> getText() override;
+  std::vector<std::shared_ptr<RenderableTextRow>> getText() override;
 };
 
 #endif

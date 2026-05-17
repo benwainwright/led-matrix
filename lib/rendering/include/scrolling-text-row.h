@@ -2,15 +2,15 @@
 #define SCROLLING_TEXT_ROW_H
 
 #include "alignment.h"
-#include "renderable-text.h"
+#include "renderable-text-row.h"
 #include "text.h"
 #include <Adafruit_GFX.h>
 #include <Arduino.h>
 #include <memory>
 
-class ScrollingTextRow : public RenderableText {
+class ScrollingTextRow : public RenderableTextRow {
 private:
-  std::shared_ptr<RenderableText> parent;
+  std::shared_ptr<RenderableTextRow> parent;
   size_t scrollInterval;
   int16_t maxWidth;
   unsigned long nextFrame;
@@ -18,7 +18,7 @@ private:
   int16_t scrollPosition;
 
 public:
-  ScrollingTextRow(std::shared_ptr<RenderableText> row, size_t scrollInterval, int16_t maxWidth);
+  ScrollingTextRow(std::shared_ptr<RenderableTextRow> row, size_t scrollInterval, int16_t maxWidth);
   void tick(MatrixPanel_I2S_DMA* display) override;
   Text& operator[](size_t index);
   void dirtyRow();

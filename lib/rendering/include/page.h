@@ -1,7 +1,7 @@
 #ifndef PAGE_H
 #define PAGE_H
 
-#include "renderable-text.h"
+#include "renderable-text-row.h"
 #include "renderable.h"
 #include "text-row.h"
 #include <Adafruit_GFX.h>
@@ -16,9 +16,9 @@ private:
   size_t gap;
   const GFXfont* defaultFont;
   bool verticallyAlignRows;
-  void renderRow(RenderableText& row, uint8_t index);
-  void updateRow(RenderableText& row, uint8_t index);
-  void positionRowContents(RenderableText& row, const GFXfont* defaultFont);
+  void renderRow(RenderableTextRow& row, uint8_t index);
+  void updateRow(RenderableTextRow& row, uint8_t index);
+  void positionRowContents(RenderableTextRow& row, const GFXfont* defaultFont);
 
   void clearText(Text& textItem, int size);
   int16_t getHeightOffsetForCentre(int16_t x, int16_t y, const char* message, uint8_t index, uint8_t count,

@@ -20,7 +20,7 @@ public:
   void tick() override;
   int gap() { return 0; }
   void setDepartures(const std::vector<Departure>& departures);
-  std::vector<std::shared_ptr<RenderableText>> getText() override;
+  std::vector<std::shared_ptr<RenderableTextRow>> getText() override;
 };
 
 #endif

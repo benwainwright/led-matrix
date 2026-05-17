@@ -102,7 +102,7 @@ int16_t Page::getWidthOfTextItem(const Text& text, int16_t x, int16_t y) {
   return w;
 }
 
-void Page::positionRowContents(RenderableText& row, const GFXfont* defaultFont) {
+void Page::positionRowContents(RenderableTextRow& row, const GFXfont* defaultFont) {
   auto xPosition = row.x();
   for (int i = 0; i < row.size(); i++) {
     {
@@ -138,7 +138,7 @@ void Page::renderText(Text& textItem, int size) {
   textItem.markRendered();
 }
 
-void Page::updateRow(RenderableText& row, uint8_t index) {
+void Page::updateRow(RenderableTextRow& row, uint8_t index) {
   auto text = rows->getText();
   display->setTextSize(row.fontSize());
   for (size_t i = 0; i < row.size(); i++) {
@@ -159,7 +159,7 @@ void Page::updateRow(RenderableText& row, uint8_t index) {
   this->positionRowContents(row, defaultFont);
 }
 
-void Page::renderRow(RenderableText& row, uint8_t index) {
+void Page::renderRow(RenderableTextRow& row, uint8_t index) {
 
   for (size_t i = 0; i < row.size(); i++) {
     if (row[i].isDirty()) {

@@ -3,8 +3,8 @@
 DeparturesBoard::DeparturesBoard(size_t displayWidth, std::function<void(DeparturesBoard&)> onTick)
     :
 
-      rows(std::vector<DepartureRow>{DepartureRow(displayWidth), DepartureRow(displayWidth),
-                                     DepartureRow(displayWidth), DepartureRow(displayWidth)}),
+      rows(std::vector<DepartureRow>{DepartureRow(displayWidth), DepartureRow(displayWidth), DepartureRow(displayWidth),
+                                     DepartureRow(displayWidth)}),
       onTick(onTick) {};
 
 void DeparturesBoard::setDepartures(const std::vector<Departure>& departures) {
@@ -22,8 +22,8 @@ void DeparturesBoard::tick() {
   }
 }
 
-std::vector<std::shared_ptr<RenderableText>> DeparturesBoard::getText() {
-  std::vector<std::shared_ptr<RenderableText>> text;
+std::vector<std::shared_ptr<RenderableTextRow>> DeparturesBoard::getText() {
+  std::vector<std::shared_ptr<RenderableTextRow>> text;
 
   for (auto& row : rows) {
     text.push_back(row.getText());

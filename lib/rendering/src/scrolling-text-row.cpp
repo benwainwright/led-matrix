@@ -3,7 +3,7 @@
 #include "calculator.h"
 #include <string>
 
-ScrollingTextRow::ScrollingTextRow(std::shared_ptr<RenderableText> row, size_t scrollInterval, int16_t maxWidth)
+ScrollingTextRow::ScrollingTextRow(std::shared_ptr<RenderableTextRow> row, size_t scrollInterval, int16_t maxWidth)
     : parent(row), scrollInterval(scrollInterval), maxWidth(maxWidth), nextFrame(0), dirtyFromScroll(false),
       scrollPosition(0) {}
 

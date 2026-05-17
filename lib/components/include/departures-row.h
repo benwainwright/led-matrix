@@ -5,7 +5,7 @@
 
 class DepartureRow {
 private:
-  std::shared_ptr<RenderableText> text;
+  std::shared_ptr<RenderableTextRow> text;
   Departure departure;
   String withLeadingZeros(int number) const;
   std::string toTime(time_t time) const;
@@ -13,6 +13,6 @@ private:
 public:
   DepartureRow(size_t displayWidth);
   void setContent(Departure departure);
-  std::shared_ptr<RenderableText> getText();
+  std::shared_ptr<RenderableTextRow> getText();
 };
 #endif
