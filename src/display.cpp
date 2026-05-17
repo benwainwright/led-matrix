@@ -42,17 +42,8 @@ void initDisplay(App* app) {
   app->display->setFont(&andala4pt7b);
 }
 
-void displayLoop(void* parameter)
-
-{
-  App* app = static_cast<App*>(parameter);
-
-  initDisplay(app);
-
-  xEventGroupWaitBits(app->finishedDataInitialisationEventGroup, DATA_READY_BIT, pdFALSE, pdFALSE, portMAX_DELAY);
-
+std::map<std::string, std::unique_ptr<Renderable>> setupRenderables(App* app) {
   std::map<std::string, std::unique_ptr<Renderable>> renderables;
-
   renderables[CLOCK_PAGE] = std::make_unique<Clock>();
 
   auto updateMedia = [app](MediaDisplay& media) { media.setMedia(app->state.title(), app->state.artist()); };
@@ -61,6 +52,18 @@ void displayLoop(void* parameter)
   auto updateDepartures = [app](DeparturesBoard& board) { board.setDepartures(app->departures); };
   renderables[TRAINS_PAGE] = std::make_unique<DeparturesBoard>(DISPLAY_WIDTH, updateDepartures);
 
+  renderables;
+}
+
+void displayLoop(void* parameter)
+
+{
+  App* app = static_cast<App*>(parameter);
+  initDisplay(app);
+
+  xEventGroupWaitBits(app->finishedDataInitialisationEventGroup, DATA_READY_BIT, pdFALSE, pdFALSE, portMAX_DELAY);
+
+  auto renderables = setupRenderables(app);
   auto renderer = Renderer(app->display, std::move(renderables), CLOCK_PAGE);
 
   renderer.init();
